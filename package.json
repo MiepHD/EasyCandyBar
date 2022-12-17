@@ -1,0 +1,27 @@
+{
+  "name": "com.froxot.easycandybar",
+  "version": "0.0.1",
+  "description": "GUI for Candybar",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiepHD/easycandybar.git"
+  },
+  "keywords": [
+    "electron",
+    "nodejs",
+    "desktop-application",
+    "candybar",
+    "gui",
+    "easycandybar"
+  ],
+  "author": "MiepHD",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MiepHD/easycandybar/issues"
+  },
+  "homepage": "https://github.com/MiepHD/easycandybar#readme"
+}
