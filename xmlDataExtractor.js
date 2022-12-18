@@ -16,13 +16,7 @@ function ByProjectPath(path) {
                     category = line.split('"')[1];
                 } else if (line.includes("item")) {
                     const drawable = line.split('"')[1];
-                    const match = line.match(/<!--(.+?)-->/);
-                    let title;
-                    try {
-                        title = match[1].trim();
-                    } catch {
-                        title = "Unknown"
-                    }
+                    const title = getComment(line);
                     data[drawable] = {
                         "category": category,
                         "title": title
@@ -34,30 +28,18 @@ function ByProjectPath(path) {
                 if (err) {
                     console.error(err);
                 } else {
-                    if (file == "appfilter") {
-                        for (const item of result.resources.item) {
-                            const { component , drawable } = item.$;
-                            if (drawable in data) {
-                                data[drawable]["component"] = component;
-                            } else {
-                                data[drawable] = {
-                                    "component": component,
-                                    "category": "None",
-                                    "title": "Unknown"
-                                }
-                            }
-                        }
-                    } else if (file == "appmap") {
-                        for (const item of result.appmap.item) {
-                            const { "class": className , "image": drawable } = item.$;
-                            if (drawable in data) {
-                                data[drawable]["class"] = className;
-                            } else {
-                                data[drawable] = {
-                                    "class": className,
-                                    "category": "None",
-                                    "title": "Unknown"
-                                }
+                    const dict = JSON.parse(fs.readFileSync("xml2obj.json", "utf8"));
+                    for (const item of result[dict[file]["root"]][dict[file]["item"]]) {
+                        const othername = dict[file]["other"];
+                        const other = item.$[othername];
+                        const drawable = item.$[dict[file]["drawable"]];
+                        if (drawable in data) {
+                            data[drawable][othername] = other;
+                        } else {
+                            data[drawable] = {
+                                othername: other,
+                                "category": "None",
+                                "title": "Unknown"
                             }
                         }
                     }
@@ -66,6 +48,17 @@ function ByProjectPath(path) {
         }
     };
     return data;
+}
+
+function getComment(line) {
+    const match = line.match(/<!--(.+?)-->/);
+    let comment;
+    try {
+        comment = match[1].trim();
+    } catch {
+        comment = "Unknown"
+    }
+    return comment;
 }
 
 module.exports = {

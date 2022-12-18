@@ -1,0 +1,20 @@
+{
+    "appmap": {
+        "root": "appmap",
+        "other": "class",
+        "drawable": "image",
+        "item": "item"
+    },
+    "appfilter": {
+        "root": "resources",
+        "other": "component",
+        "drawable": "drawable",
+        "item": "item"
+    },
+    "theme_resources": {
+        "root": "Theme",
+        "other": "name",
+        "drawable": "image",
+        "item": "AppIcon"
+    }
+}
