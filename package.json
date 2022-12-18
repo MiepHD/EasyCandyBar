@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/MiepHD/easycandybar/issues"
   },
-  "homepage": "https://github.com/MiepHD/easycandybar#readme"
+  "homepage": "https://github.com/MiepHD/easycandybar#readme",
+  "dependencies": {
+    "xml2js": "^0.4.23"
+  }
 }

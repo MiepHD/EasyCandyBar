@@ -1,7 +1,12 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const xmlparse = require("./xmlDataExtractor");
 
 const createWindow = () => {
-    const win = new BrowserWindow({ 
+    const win = new BrowserWindow({
+        webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false
+		},
         width: 800, 
         height: 600
     });
@@ -14,5 +19,20 @@ app.whenReady().then(() => {
     });
 });
 app.on("window-all-closed", () => {
-    if (ProcessingInstruction.platform !== "darwin") app.quit();
+    if (process.platform !== "darwin") app.quit();
 })
+
+ipcMain.on("getIcons", (event, message) => {
+    console.log("requested");
+    dialog.showOpenDialog(
+        BrowserWindow.getFocusedWindow(), {
+        properties: ["openDirectory"],
+        filters: [{
+            name: "All Files",
+            extensions: ["*"]
+        }]
+    }).then ( result => {
+        event.reply("allIcons", xmlparse.ByProjectPath(result.filePaths[0]));
+        console.log("send");
+    });
+});
