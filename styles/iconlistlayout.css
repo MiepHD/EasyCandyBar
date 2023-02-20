@@ -1,0 +1,7 @@
+ul {
+    display: grid;
+    grid-template-columns: repeat(10, auto);
+    width: 100%;
+    padding-left: 0px;
+}
+img { width: 100% }
