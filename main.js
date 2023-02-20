@@ -31,9 +31,10 @@ ipcMain.on("getIcons", (event, message) => {
         }]
     }).then ( result => {
         const path = result.filePaths[0];
-        fs.copySync(`${path.replace("\\\\", "/")}/app/src/main/res/drawable-nodpi`, paths.join(__dirname, "/cache"));
-        console.log("copied files");
         event.reply("allIcons", xmlparse.ByProjectPath(path));
         console.log("send");
+        fs.copySync(`${path.replace("\\\\", "/")}/app/src/main/res/drawable-nodpi`, paths.join(__dirname, "/project/icons"));
+        fs.writeFile("project/project.json", `{ "package": "${message}" }`);
+        console.log("copied files");
     });
 });
