@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron"),
-    xmlparse = require("./xmlDataExtractor");
+    xmlparse = require("./xmlDataExtractor"),
+    fs = require("fs-extra"),
+    paths = require("path");
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -28,7 +30,10 @@ ipcMain.on("getIcons", (event, message) => {
             extensions: ["*"]
         }]
     }).then ( result => {
-        event.reply("allIcons", xmlparse.ByProjectPath(result.filePaths[0]));
+        const path = result.filePaths[0];
+        fs.copySync(`${path.replace("\\\\", "/")}/app/src/main/res/drawable-nodpi`, paths.join(__dirname, "/cache"));
+        console.log("copied files");
+        event.reply("allIcons", xmlparse.ByProjectPath(path));
         console.log("send");
     });
 });

@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/MiepHD/easycandybar#readme",
   "dependencies": {
+    "fs-extra": "^11.1.0",
+    "jquery": "^3.6.3",
     "xml2js": "^0.4.23"
   }
 }
