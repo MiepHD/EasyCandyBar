@@ -1,11 +1,12 @@
 const { ipcRenderer } = require("electron");
 window.$ = window.jQuery = require('jquery');
 
-const params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop), });
-ipcRenderer.send('getIcons', params.pname);
-
-ipcRenderer.on('allIcons', (event, icons) => {
-    for (drawable of Object.keys(icons)) {
-        $("ul").append($(`<a href=""><img src="project/icons/${drawable}.png"></a>`));
+ipcRenderer.send('getIcons');
+ipcRenderer.on('allIcons', (event, data) => {
+    const pname = data.projectinfo.package;
+    document.title = pname;
+    for (drawable of Object.keys(data.iconsdata)) {
+        $("ul").append($(`<a href=""><img src="projects/${pname}/icons/${drawable}.png"></a>`));
     }
+    console.error(data.missingimages);
 });
