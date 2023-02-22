@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron"),
-    xmlparse = require("./xmlDataExtractor"),
-    fs = require("fs-extra"),
-    paths = require("path");
+    loadproject = require("./loadProject"),
+    fs = require("fs");
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -20,7 +19,7 @@ app.whenReady().then(() => {
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
 
-ipcMain.on("getIcons", (event, message) => {
+ipcMain.on("getIcons", (event) => {
     console.log("requested");
     dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(), {
@@ -30,11 +29,12 @@ ipcMain.on("getIcons", (event, message) => {
             extensions: ["*"]
         }]
     }).then ( result => {
-        const path = result.filePaths[0];
-        event.reply("allIcons", xmlparse.ByProjectPath(path));
-        console.log("send");
-        fs.copySync(`${path.replace("\\\\", "/")}/app/src/main/res/drawable-nodpi`, paths.join(__dirname, "/project/icons"));
-        fs.writeFile("project/project.json", `{ "package": "${message}" }`);
-        console.log("copied files");
+        const path = result.filePaths[0].replace("\\\\", "/");
+        if (fs.existsSync(`${path}/project.json`)) {
+            event.reply("allIcons", loadproject.existing(path));
+        } else {
+            event.reply("allIcons", loadproject.new(path));
+        }
+        console.log("sent iconsdata");
     });
 });
