@@ -4,8 +4,13 @@ const parser = new xml2js.Parser();
 
 function ByProjectPath(path) {
     const data = {},
-        files = ["drawable", "appfilter", "appmap", "theme_resources"];
+        files = ["drawable", "appfilter", "theme_resources", "appmap"];
+    let index = 0;
     path = `${path}/app/src/main/res/`;
+    for (const file of files) {
+        if (!(fs.existsSync(`${path}xml/${file}.xml`))) files.splice(index);
+        index++;
+    }
     for (const file of files) {
         const filepath = `${path}xml/${file}.xml`,
             xml = fs.readFileSync(filepath, "utf8");
@@ -31,10 +36,37 @@ function ByProjectPath(path) {
                         const othername = dict[file]["other"],
                             other = item.$[othername],
                             drawable = item.$[dict[file]["drawable"]];
-                        if (drawable in data) { data[drawable][othername] = other; }
+                        let packnactiv = [],
+                            package = "Unknown",
+                            activity = "Unknown";
+                        switch(file) {
+                            case "appfilter":
+                                if (other.includes("/") && other.includes("{") && other.includes("}")) {
+                                    packnactiv = other.split("/");
+                                    package = packnactiv[0].split("{")[1];
+                                    activity = packnactiv[1].split("}")[0];
+                                } else { console.error("Syntax error"); }
+                                break;
+                            case "theme_resources":
+                                if (other.includes("/")) {
+                                    packnactiv = other.split("/");
+                                    package = packnactiv[0];
+                                    activity = packnactiv[1];
+                                } else { console.error("Syntax error"); }
+                                break;
+                            default:
+                            case "appmap":
+                                activity = other;
+                                break;
+                        }
+                        if (drawable in data) { 
+                            data[drawable]["package"] = package;
+                            data[drawable]["activity"] = activity;
+                        }
                         else {
                             data[drawable] = {
-                                othername: other,
+                                "package": package,
+                                "activity": activity,
                                 "category": "None",
                                 "title": "Unknown"
                             }
