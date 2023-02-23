@@ -19,7 +19,7 @@ app.whenReady().then(() => {
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
 
-ipcMain.on("getIcons", (event) => {
+ipcMain.on("loadProject", (event) => {
     console.log("requested");
     dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(), {
@@ -35,6 +35,11 @@ ipcMain.on("getIcons", (event) => {
         } else {
             event.reply("allIcons", loadproject.new(path));
         }
-        console.log("sent iconsdata");
+        console.log("Sent iconsdata");
     });
 });
+
+ipcMain.on("loadProjectByName", (event, pname) => {
+    event.reply("allIcons", loadproject.existing(`projects/${pname}`));
+    console.log("Sent iconsdata");
+})

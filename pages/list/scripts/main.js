@@ -1,7 +1,12 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer } = require("electron"),
+    params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop)});
 window.$ = window.jQuery = require('jquery');
 
-ipcRenderer.send('getIcons');
+if (params.pname) {
+    ipcRenderer.send('loadProjectByName', params.pname);
+} else {
+    ipcRenderer.send('loadProject');
+}
 ipcRenderer.on('allIcons', (event, data) => {
     console.log("Received");
     console.log(data);

@@ -13,7 +13,7 @@ function newProject(path, pname) {
             "projectinfo": { "package": "Unknown" },
             "iconsdata": ${JSON.stringify(iconsdata)}
         }
-    `
+    `;
     fs.writeFileSync("projects/unknown/project.json", data);
     console.log("Wrote project.json.");
     return JSON.parse(data);

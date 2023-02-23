@@ -1,6 +1,6 @@
-const fs = require("fs");
-const xml2js = require('xml2js');
-const parser = new xml2js.Parser();
+const fs = require("fs"),
+    xml2js = require('xml2js'),
+    parser = new xml2js.Parser();
 
 function ByProjectPath(path) {
     const data = {},
