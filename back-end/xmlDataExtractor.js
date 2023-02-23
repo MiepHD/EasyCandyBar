@@ -1,3 +1,5 @@
+const { parse } = require("path");
+
 const fs = require("fs"),
     xml2js = require('xml2js'),
     parser = new xml2js.Parser();
@@ -15,18 +17,7 @@ function ByProjectPath(path) {
         const filepath = `${path}xml/${file}.xml`,
             xml = fs.readFileSync(filepath, "utf8");
         if (file == "drawable") {
-            let category = "";
-            for (line of xml.split("\n")) {
-                if (line.includes("category")) { category = line.split('"')[1]; }
-                else if (line.includes("item")) {
-                    const drawable = line.split('"')[1],
-                        title = getComment(line);
-                    data[drawable] = {
-                        "category": category,
-                        "title": title
-                    };
-                }
-            }
+            parseDrawable(data, xml);
         } else {
             xml2js.parseString(xml, (err, result) => {
                 if (err) { console.error(err); }
@@ -36,47 +27,71 @@ function ByProjectPath(path) {
                         const othername = dict[file]["other"],
                             other = item.$[othername],
                             drawable = item.$[dict[file]["drawable"]];
-                        let packnactiv = [],
-                            package = "Unknown",
-                            activity = "Unknown";
+                        let packnactiv = ["Unknown", "Unknown"];
                         switch(file) {
                             case "appfilter":
-                                if (other.includes("/") && other.includes("{") && other.includes("}")) {
-                                    packnactiv = other.split("/");
-                                    package = packnactiv[0].split("{")[1];
-                                    activity = packnactiv[1].split("}")[0];
-                                } else { console.error("Syntax error"); }
+                                packnactiv = parseAppfilter(other, packnactiv);
                                 break;
                             case "theme_resources":
-                                if (other.includes("/")) {
-                                    packnactiv = other.split("/");
-                                    package = packnactiv[0];
-                                    activity = packnactiv[1];
-                                } else { console.error("Syntax error"); }
+                                packnactiv = parseThemeResources(other, packnactiv);
                                 break;
                             default:
                             case "appmap":
-                                activity = other;
+                                packnactiv[1] = other;
                                 break;
                         }
-                        if (drawable in data) { 
-                            data[drawable]["package"] = package;
-                            data[drawable]["activity"] = activity;
-                        }
-                        else {
-                            data[drawable] = {
-                                "package": package,
-                                "activity": activity,
-                                "category": "None",
-                                "title": "Unknown"
-                            }
-                        }
+                        addToData(data, packnactiv, drawable);
                     }
                 }
             });
         }
     };
     return data;
+}
+
+function parseDrawable(data, xml) {
+    let category = "";
+    for (line of xml.split("\n")) {
+        if (line.includes("category")) { category = line.split('"')[1]; }
+        else if (line.includes("item")) {
+            const drawable = line.split('"')[1],
+                title = getComment(line);
+            data[drawable] = {
+                "category": category,
+                "title": title
+            };
+        }
+    }
+}
+
+function parseAppfilter(other, packnactiv) {
+    if (other.includes("/") && other.includes("{") && other.includes("}")) {
+        const splitother = other.split("/");
+        packnactiv[0] = splitother[0].split("{")[1],
+        packnactiv[1] = splitother[1].split("}")[0];
+    } else { console.error("Syntax error"); }
+    return packnactiv;
+}
+
+function parseThemeResources(other, packnactiv) {
+    if (other.includes("/")) {
+        packnactiv = other.split("/");
+    } else { console.error("Syntax error"); }
+    return packnactiv;
+}
+
+function addToData(data, packnactiv, drawable) {
+    if (drawable in data) { 
+        data[drawable]["package"] = packnactiv[0];
+        data[drawable]["activity"] = packnactiv[1];
+    } else {
+        data[drawable] = {
+            "package": packnactiv[0],
+            "activity": packnactiv[1],
+            "category": "None",
+            "title": "Unknown"
+        }
+    }
 }
 
 function getComment(line) {
