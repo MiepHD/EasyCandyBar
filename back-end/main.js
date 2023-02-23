@@ -30,16 +30,25 @@ ipcMain.on("loadProject", (event) => {
         }]
     }).then ( result => {
         const path = result.filePaths[0].replace("\\\\", "/");
-        if (fs.existsSync(`${path}/project.json`)) {
-            event.reply("allIcons", loadproject.existing(path));
-        } else {
-            event.reply("allIcons", loadproject.new(path));
+        const data = fs.existsSync(`${path}/project.json`) ? loadproject.existing(path) : loadproject.new(path);
+        const returndata = JSON.parse(`${JSON.stringify(data)}`);
+        console.log("Filtering iconsdata...");
+        for (key of Object.keys(data["iconsdata"])) {
+            delete returndata["iconsdata"][key]["package"];
+            delete returndata["iconsdata"][key]["activity"];
         }
-        console.log("Sent iconsdata");
+        console.log("Filtered iconsdata.");
+        event.reply("allIcons", returndata);
+        console.log("Sent data.");
     });
 });
 
 ipcMain.on("loadProjectByName", (event, pname) => {
     event.reply("allIcons", loadproject.existing(`projects/${pname}`));
     console.log("Sent iconsdata");
-})
+});
+
+ipcMain.on("getIcon", (event, icon) => {
+    event.reply("Icon", loadproject.getCurrentData()["iconsdata"][icon]);
+    console.log("Sent icon");
+});
