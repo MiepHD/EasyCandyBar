@@ -3,20 +3,20 @@ const xmlparse = require("./xmlDataExtractor"),
     fs = require("fs-extra");
 
 function newProject(path, pname) {
-    const iconsdata = {};
-    iconsdata["iconsdata"] = xmlparse.ByProjectPath(path);
-    console.log("extracted data");
-    fs.copySync(`${path}/app/src/main/res/drawable-nodpi`, paths.join(__dirname, `/projects/unknown/icons`));
-    console.log("copied icons");
-    fs.writeFileSync(`projects/unknown/project.json`, `
+    console.log("Extracting data...");
+    const iconsdata = xmlparse.ByProjectPath(path);
+    console.log("Extracted data.\nCopying icons...");
+    fs.copySync(`${path}/app/src/main/res/drawable-nodpi`, "projects/unknown/icons");
+    console.log("Copied icons.\nWriting project.json...");
+    const data = `
         {
             "projectinfo": { "package": "Unknown" },
             "iconsdata": ${JSON.stringify(iconsdata)}
         }
-    `);
-    console.log("wrote project.json");
-    iconsdata["projectinfo"] = { "package": "unknown" };
-    return iconsdata;
+    `
+    fs.writeFileSync("projects/unknown/project.json", data);
+    console.log("Wrote project.json.");
+    return JSON.parse(data);
 }
 
 function existingProject(path) {

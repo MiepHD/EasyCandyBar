@@ -2,7 +2,7 @@
   "name": "com.froxot.easycandybar",
   "version": "0.0.1",
   "description": "GUI for Candybar",
-  "main": "main.js",
+  "main": "back-end/main.js",
   "scripts": {
     "start": "electron ."
   },

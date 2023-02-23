@@ -2,6 +2,14 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron"),
     loadproject = require("./loadProject"),
     fs = require("fs");
 
+const oldConsoleLog = console.log;
+console.log = (message) => {
+    const error = new Error();
+    const stack = error.stack.split('\n');
+    const lastFunction = stack[2].trim().split(' ')[1];
+    oldConsoleLog(`${lastFunction}: ${message}`);
+}
+
 const createWindow = () => {
     const win = new BrowserWindow({
         webPreferences: {
@@ -11,7 +19,7 @@ const createWindow = () => {
         width: 800, 
         height: 600
     });
-    win.loadFile("index.html");
+    win.loadFile("pages/home/home.html");
 }
 app.whenReady().then(() => {
     createWindow();

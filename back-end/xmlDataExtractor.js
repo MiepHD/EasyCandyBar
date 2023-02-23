@@ -31,7 +31,7 @@ function ByProjectPath(path) {
             xml2js.parseString(xml, (err, result) => {
                 if (err) { console.error(err); }
                 else {
-                    const dict = JSON.parse(fs.readFileSync("xml2obj.json", "utf8"));
+                    const dict = JSON.parse(fs.readFileSync("assets/xml2obj.json", "utf8"));
                     for (const item of result[dict[file]["root"]][dict[file]["item"]]) {
                         const othername = dict[file]["other"],
                             other = item.$[othername],
