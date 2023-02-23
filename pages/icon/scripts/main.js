@@ -5,6 +5,4 @@ ipcRenderer.send('getIcon', {
     "icon": params.icon,
     "pname": params.pname
 });
-document.addEventListener("DOMContentLoaded", () => {
-    $$("form").action = `../list/list.html?pname=${params.pname}`
-})
+document.addEventListener("DOMContentLoaded", () => { $$("input[name=pname]").value = params.pname; });
