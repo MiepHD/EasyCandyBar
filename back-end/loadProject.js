@@ -17,7 +17,8 @@ function newProject(path, pname) {
     `;
     fs.writeFileSync("projects/unknown/project.json", data);
     console.log("Wrote project.json.");
-    return JSON.parse(data);
+    data = JSON.parse(data);
+    return data;
 }
 
 function existing(path) {
@@ -30,7 +31,10 @@ function existing(path) {
     return data;
 }
 
-function getCurrentData() { return data; }
+function getCurrentData() {
+    console.log(data);
+    return data;
+}
 
 module.exports = {
     new: newProject,
