@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 ipcRenderer.send('getIcon', params.icon);
-ipcRenderer.on("Icon", (event, data) => {
+ipcRenderer.on("Icon", (e, data) => {
     $$("input[name=name]").value = data.title;
     document.title = data.title;
     $$("input[name=description]").value = data.description;
@@ -17,3 +17,5 @@ ipcRenderer.on("Icon", (event, data) => {
     $$("input[name=package]").value = data.package;
     $$("input[name=activity]").value = data.activity;
 });
+
+ipcRenderer.on("imagePath", (e, path) => { $$("input[name=imagepath]").value = path});
