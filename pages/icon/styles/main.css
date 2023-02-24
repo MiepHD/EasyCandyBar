@@ -1,0 +1,5 @@
+input[name=pname],
+input[name=imagepath] { display: none; }
+form {
+    display: grid;
+}

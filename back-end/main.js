@@ -52,3 +52,7 @@ ipcMain.on("getIcon", (event, icon) => {
     event.reply("Icon", loadproject.getCurrentData()["iconsdata"][icon]);
     console.log("Sent icon");
 });
+
+ipcMain.on("chooseImagePath", (event) => {
+    
+})
