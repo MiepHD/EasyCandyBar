@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron"),
+const { app, BrowserWindow, ipcMain } = require("electron"),
     loadproject = require("./loadProject"),
+    choose = require("./pathChooser"),
     fs = require("fs");
 
 const createWindow = () => {
@@ -19,17 +20,9 @@ app.whenReady().then(() => {
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
 
-ipcMain.on("loadProject", (event) => {
+ipcMain.on("loadProject", e => {
     console.log("requested");
-    dialog.showOpenDialog(
-        BrowserWindow.getFocusedWindow(), {
-        properties: ["openDirectory"],
-        filters: [{
-            name: "All Files",
-            extensions: ["*"]
-        }]
-    }).then ( result => {
-        const path = result.filePaths[0].replace("\\\\", "/");
+    choose.dir().then(path => {
         const data = fs.existsSync(`${path}/project.json`) ? loadproject.existing(path) : loadproject.new(path);
         const returndata = JSON.parse(`${JSON.stringify(data)}`);
         console.log("Filtering iconsdata...");
@@ -38,21 +31,19 @@ ipcMain.on("loadProject", (event) => {
             delete returndata["iconsdata"][key]["activity"];
         }
         console.log("Filtered iconsdata.");
-        event.reply("allIcons", returndata);
+        e.reply("allIcons", returndata);
         console.log("Sent data.");
     });
 });
 
-ipcMain.on("loadProjectByName", (event, pname) => {
-    event.reply("allIcons", loadproject.existing(`projects/${pname}`));
+ipcMain.on("loadProjectByName", (e, pname) => {
+    e.reply("allIcons", loadproject.existing(`projects/${pname}`));
     console.log("Sent iconsdata");
 });
 
-ipcMain.on("getIcon", (event, icon) => {
-    event.reply("Icon", loadproject.getCurrentData()["iconsdata"][icon]);
+ipcMain.on("getIcon", (e, icon) => {
+    e.reply("Icon", loadproject.getCurrentData()["iconsdata"][icon]);
     console.log("Sent icon");
 });
 
-ipcMain.on("chooseImagePath", (event) => {
-    
-})
+ipcMain.on("chooseImagePath", e => {choose.image().then(path => { e.reply("imagePath", path)})});
