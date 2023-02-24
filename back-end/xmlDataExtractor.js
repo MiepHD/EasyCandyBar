@@ -101,4 +101,4 @@ function getComment(line) {
     return comment;
 }
 
-module.exports = { ByProjectPath: ByProjectPath }
+module.exports = { ByProjectPath };

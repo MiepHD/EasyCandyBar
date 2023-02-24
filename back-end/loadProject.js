@@ -38,6 +38,6 @@ function getCurrentData() {
 
 module.exports = {
     new: newProject,
-    existing: existing,
-    getCurrentData: getCurrentData
+    existing,
+    getCurrentData
 }
