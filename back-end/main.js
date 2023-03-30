@@ -66,4 +66,4 @@ ipcMain.on("saveIcon", (e, data) => {
     fs.writeFileSync(`projects/${data.pname}/project.json`, JSON.stringify(fulldata));
     console.log("Changed project.json.");
     e.reply("savedIcon");
-})
+});
