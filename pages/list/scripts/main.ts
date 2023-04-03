@@ -1,22 +1,21 @@
 const { ipcRenderer } = require("electron"),
-    params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop)});
-window.$ = window.jQuery = require('jquery');
+    params: any = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop)});
 ipcRenderer.send("getProjectInfo");
 
-id = "";
-ipcRenderer.on("ProjectInfo", (event, data) => {
+let id: string = "";
+ipcRenderer.on("ProjectInfo", (event: any, data: any) => {
     document.title = data.title;
     id = data.id;
     ipcRenderer.send('getFinishedIcons');
 });
-ipcRenderer.on('Icons', (event, data) => {
+ipcRenderer.on('Icons', (event: any, data: any) => {
     console.log("Received");
     console.log(data);
-    type = "finished";
+    let type: string = "finished";
     if (params.type) type = params.type;
     $$("a").href = `../icon/icon.html?type=${type}`;
-    for (drawable of data) {
+    for (const drawable of data) {
         $("ul").append($(`<a href="../icon/icon.html?icon=${drawable}&type=${type}"><img src="../../projects/${id}/${type}/${drawable}.png"></a>`));
     }
-    if (data[missingimages]) console.error(data[missingimages]);
+    if (data["missingimages"]) console.error(data["missingimages"]);
 });

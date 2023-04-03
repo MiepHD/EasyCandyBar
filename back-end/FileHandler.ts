@@ -1,18 +1,20 @@
 class FileHandler {
-    constructor(project) {
+    project: string;
+    fs: any;
+    constructor(project: string) {
         this.project = project;
         this.fs = require("fs");
     }
-    saveIconProperties(id, data) {
+    saveIconProperties(id: string, data: any) {
         this.write(`projects/${this.project}/properties/${id}.json`, data);
     }
-    loadIconProperties(id) {
+    loadIconProperties(id: string) {
         return this.read(`projects/${this.project}/properties/${id}.json`);
     }
-    read(path) {
+    read(path: string) {
         return JSON.parse(this.fs.readFileSync(path, { encoding: "utf8" }));
     }
-    write(path, data) {
+    write(path: string, data: any) {
         this.fs.writeFileSync(path, JSON.stringify(data));
     }
 }
