@@ -1,6 +1,6 @@
 ul {
     display: grid;
-    grid-template-columns: repeat(10, auto);
+    grid-template-columns: repeat(10, 1fr);
     width: 100%;
     padding-left: 0px;
 }

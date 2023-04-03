@@ -1,5 +1,4 @@
-"use strict";
-function $$(query) {
+function $$(query: string): any {
     const result = document.querySelectorAll(query);
     switch (result.length) {
         case 0: return undefined;

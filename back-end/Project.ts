@@ -1,6 +1,10 @@
-"use strict";
 class Project {
-    constructor(id) {
+    id: string;
+    fs: any;
+    finished: Array<string>;
+    requested: Array<string>;
+    title: string;
+    constructor(id: string) {
         this.id = id;
         const FileHandler = require("./FileHandler");
         this.fs = new FileHandler(id);
@@ -9,13 +13,13 @@ class Project {
         this.requested = data.requested;
         this.title = data.title;
     }
-    getFinishedIcons() {
+    getFinishedIcons(): Array<string> {
         return this.finished;
     }
-    getRequestedIcons() {
+    getRequestedIcons(): Array<string> {
         return this.requested;
     }
-    saveIconProperties(id, icon) {
+    saveIconProperties(id: string, icon: any): void {
         this.finished.push(id);
         this.fs.write(`projects/${this.id}/project.json`, {
             "id": this.id,
@@ -25,15 +29,18 @@ class Project {
         });
         this.fs.saveIconProperties(id, icon);
     }
-    getConfig() {
+    getConfig(): any {
         return JSON.parse(this.fs.read(`projects/${this.id}/config.json`));
     }
-    setConfig(data) {
+    setConfig(data: any): void {
+
     }
-    getChangelog() {
+    getChangelog(): any {
         return JSON.parse(this.fs.read(`projects/${this.id}/changelog.json`));
     }
-    setChangelog(data) {
+    setChangelog(data: any): void {
+
     }
 }
+
 module.exports = Project;
