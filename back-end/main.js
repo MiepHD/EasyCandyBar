@@ -3,6 +3,7 @@ const { app, BrowserWindow, ipcMain } = require("electron"),
     choose = require("./pathChooser"),
     fs = require("fs");
 
+//Start app
 const createWindow = () => {
     const win = new BrowserWindow({
         webPreferences: {
@@ -20,6 +21,10 @@ app.whenReady().then(() => {
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
 
+//Global variables
+let currentProject = "none";
+
+//Functions
 ipcMain.on("loadProject", e => {
     console.log("requested");
     choose.dir().then(ppath => {
@@ -30,6 +35,7 @@ ipcMain.on("loadProject", e => {
             delete returndata["iconsdata"][key]["package"];
             delete returndata["iconsdata"][key]["activity"];
         }
+        currentProject = returndata.projectinfo.package;
         console.log("Filtered iconsdata.");
         e.reply("allIcons", returndata);
         console.log("Sent data.");
@@ -37,6 +43,7 @@ ipcMain.on("loadProject", e => {
 });
 
 ipcMain.on("loadProjectByName", (e, pname) => {
+    currentProject = pname;
     e.reply("allIcons", loadproject.existing(`projects/${pname}`));
     console.log("Sent iconsdata");
 });
@@ -55,15 +62,15 @@ ipcMain.on("chooseImagePath", (e, id) => {choose.image().then(ipath => {
 ipcMain.on("saveIcon", (e, data) => {
     if (data.imagechanged) {
         console.log("Copying new file...");
-        fs.copyFileSync(`pages/icon/cache/${data.id}.png`, `projects/${data.pname}/icons/${data.id}.png`);
+        fs.copyFileSync(`pages/icon/cache/${data.id}.png`, `projects/${currentProject}/icons/${data.id}.png`);
         console.log("Copied new file.\nClearing cache...");
         fs.rmSync("pages/icon/cache/", { recursive: true, force: true });
         console.log("Cleared cache.");
     }
     console.log("Changing project.json...");
-    const fulldata = JSON.parse(fs.readFileSync(`projects/${data.pname}/project.json`, "utf-8"));
+    const fulldata = JSON.parse(fs.readFileSync(`projects/${currentProject}/project.json`, "utf-8"));
     fulldata["iconsdata"][data.id] = data["iconsdata"];
-    fs.writeFileSync(`projects/${data.pname}/project.json`, JSON.stringify(fulldata));
+    fs.writeFileSync(`projects/${currentProject}/project.json`, JSON.stringify(fulldata));
     console.log("Changed project.json.");
     e.reply("savedIcon");
 });
