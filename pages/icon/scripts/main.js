@@ -1,15 +1,26 @@
 const { ipcRenderer } = require("electron"),
     params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop)});
 
+let project;
+ipcRenderer.send("getProjectInfo");
+ipcRenderer.on("ProjectInfo", data => {
+    project = data.id;
+});
 document.addEventListener("DOMContentLoaded", () => {
-    $$("input[name=pname]").value = params.pname;
-    $$("input[name=id]").value = params.icon;
-    $$("img").src = `../../projects/${params.pname}/icons/${params.icon}.png`;
-    $$("a").href = `../list/list.html?pname=${params.pname}`;
-    $$("button").addEventListener("click", () => { ipcRenderer.send("chooseImagePath", params.icon)});
+    if (params.icon) {
+        ipcRenderer.send('getIcon', params.icon);
+        $$("input[name=id]").value = params.icon;
+    } else {
+        $$("input[name=title]").onchange = e => {
+            $$("input[name=id]").value = e.target.value.toLowerCase().replace(" ", "_");
+        }
+    }
+    $$("input[name=type]").value = params.type;
+    $$("img").src = `../../projects/${project}/${params.type}/${$$("input[name=id]").value}.png`;
+    $$("a").href = `../list/list.html`;
+    $$("button").addEventListener("click", () => { ipcRenderer.send("chooseImagePath", $$("input[name=id]").value)});
 });
 
-ipcRenderer.send('getIcon', params.icon);
 ipcRenderer.on("Icon", (e, data) => {
     $$("input[name=title]").value = data.title;
     document.title = data.title;
@@ -20,6 +31,6 @@ ipcRenderer.on("Icon", (e, data) => {
 });
 
 ipcRenderer.on("savedImage", () => {
-    $$("img").src = `cache/${params.icon}.png`;
+    $$("img").src = `cache/${$$("input[name=id]").value}.png`;
     $$("input[name=imagechanged]").checked = true;
 });

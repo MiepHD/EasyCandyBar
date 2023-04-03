@@ -11,12 +11,12 @@
 </head>
 <body>
     <form action="../icon/saving.html">
-        <input type="text" name="pname">
+        <input type="text" name="type">
         <input type="checkbox" name="imagechanged">
         <input type="text" name="id">
         <button type="button"><img src="" alt="Image of icon"></button>
         <label for="title">Name:</label>
-        <input type="text" name="title">
+        <input type="text" name="title" pattern="[A-Za-z_ ]\w+" required>
         <label for="description">Description:</label>
         <input type="text" name="description">
         <label for="category">Category:</label>

@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron"),
-    loadproject = require("./loadProject"),
-    choose = require("./pathChooser"),
+    Project = require("./Project"),
+    choose = require("./PathChooser"),
     fs = require("fs");
 
 //Start app
@@ -21,56 +21,77 @@ app.whenReady().then(() => {
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
 
-//Global variables
-let currentProject = "none";
+let currentProject;
 
-//Functions
-ipcMain.on("loadProject", e => {
-    console.log("requested");
-    choose.dir().then(ppath => {
-        const data = fs.existsSync(`${ppath}/project.json`) ? loadproject.existing(ppath) : loadproject.new(ppath);
-        const returndata = JSON.parse(`${JSON.stringify(data)}`);
-        console.log("Filtering iconsdata...");
-        for (key of Object.keys(data["iconsdata"])) {
-            delete returndata["iconsdata"][key]["package"];
-            delete returndata["iconsdata"][key]["activity"];
-        }
-        currentProject = returndata.projectinfo.package;
-        console.log("Filtered iconsdata.");
-        e.reply("allIcons", returndata);
-        console.log("Sent data.");
-    });
+ipcMain.on("openProject", (e, id) => {
+    currentProject = new Project(id);
 });
 
-ipcMain.on("loadProjectByName", (e, pname) => {
-    currentProject = pname;
-    e.reply("allIcons", loadproject.existing(`projects/${pname}`));
-    console.log("Sent iconsdata");
+ipcMain.on("getFinishedIcons", e => {
+    e.reply("Icons", currentProject.getFinishedIcons());
 });
 
-ipcMain.on("getIcon", (e, icon) => {
-    e.reply("Icon", loadproject.getCurrentData()["iconsdata"][icon]);
-    console.log("Sent icon");
+ipcMain.on("getRequestedIcons", e => {
+    e.reply("Icons", currentProject.getRequestedIcons());
 });
 
-ipcMain.on("chooseImagePath", (e, id) => {choose.image().then(ipath => {
-    if (!fs.existsSync("pages/icon/cache/")){ fs.mkdirSync("pages/icon/cache/")}
-    fs.copyFileSync(ipath, `pages/icon/cache/${id}.png`);
-    e.reply("savedImage");
-})});
+ipcMain.on("getIcon", (e, id) => {
+    e.reply("Icon", currentProject.fs.loadIconProperties(id));
+});
 
-ipcMain.on("saveIcon", (e, data) => {
-    if (data.imagechanged) {
+ipcMain.on("setIcon", (e, id, imagechanged, icon, type) => {
+    if (imagechanged) {
         console.log("Copying new file...");
-        fs.copyFileSync(`pages/icon/cache/${data.id}.png`, `projects/${currentProject}/icons/${data.id}.png`);
+        fs.copyFileSync(`pages/icon/cache/${id}.png`, `projects/${currentProject.id}/${type}/${id}.png`);
         console.log("Copied new file.\nClearing cache...");
         fs.rmSync("pages/icon/cache/", { recursive: true, force: true });
         console.log("Cleared cache.");
     }
-    console.log("Changing project.json...");
-    const fulldata = JSON.parse(fs.readFileSync(`projects/${currentProject}/project.json`, "utf-8"));
-    fulldata["iconsdata"][data.id] = data["iconsdata"];
-    fs.writeFileSync(`projects/${currentProject}/project.json`, JSON.stringify(fulldata));
-    console.log("Changed project.json.");
+    currentProject.fs.saveIconProperties(id, icon);
     e.reply("savedIcon");
+});
+
+ipcMain.on("getConfig", e => {
+
+});
+
+ipcMain.on("setConfig", (e, data) => {
+
+});
+
+ipcMain.on("getChangelog", e => {
+
+});
+
+ipcMain.on("setChangelog", (e, data) => {
+
+});
+
+ipcMain.on("chooseImagePath", (e, id) => {
+    choose.image().then(path => {
+        if (!fs.existsSync("pages/icon/cache/")){ fs.mkdirSync("pages/icon/cache/")}
+        fs.copyFileSync(path, `pages/icon/cache/${id}.png`);
+        e.reply("savedImage");
+    })
+});
+
+function ensureProject(callback) {
+    if (!(currentProject)) {
+        choose.dir().then(path => {
+            folders = path.split("\\");
+            id = folders[folders.length - 1];
+            if (!(fs.existsSync(`${path}/project.json`))) { require("./ProjectConverter")(path); }
+            currentProject = new Project(id);
+            callback();
+        });
+    } else { callback(); }
+}
+
+ipcMain.on("getProjectInfo", e => {
+    ensureProject(() => {
+        e.reply("ProjectInfo", {
+            "id": currentProject.id,
+            "title": currentProject.title
+        })
+    })
 });
