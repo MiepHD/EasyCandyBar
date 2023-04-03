@@ -18,7 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
     $$("input[name=type]").value = params.type;
     $$("img").src = `../../projects/${project}/${params.type}/${$$("input[name=id]").value}.png`;
     $$("a").href = `../list/list.html`;
-    $$("button").addEventListener("click", () => { ipcRenderer.send("chooseImagePath", $$("input[name=id]").value)});
+    $$("button").addEventListener("click", () => {
+        const id = $$("input[name=id]").value;
+        if (id&&id!="") { ipcRenderer.send("chooseImagePath", id); }
+        else { console.log("Name required")}
+    });
 });
 
 ipcRenderer.on("Icon", (e, data) => {

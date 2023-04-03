@@ -47,7 +47,7 @@ ipcMain.on("setIcon", (e, id, imagechanged, icon, type) => {
         fs.rmSync("pages/icon/cache/", { recursive: true, force: true });
         console.log("Cleared cache.");
     }
-    currentProject.fs.saveIconProperties(id, icon);
+    currentProject.saveIconProperties(id, icon);
     e.reply("savedIcon");
 });
 

@@ -14,6 +14,16 @@ class Project {
     getRequestedIcons() {
         return this.requested;
     }
+    saveIconProperties(id, icon) {
+        this.finished.push(id);
+        this.fs.write(`projects/${this.id}/project.json`, {
+            "id": this.id,
+            "title": this.title,
+            "finished": this.finished,
+            "requested": this.requested
+        });
+        this.fs.saveIconProperties(id, icon);
+    }
     getConfig() {
         this.fs.read(`projects/${this.id}/config.json`);
     }
