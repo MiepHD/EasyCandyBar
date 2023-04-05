@@ -3,14 +3,9 @@
  */
 class IconLoader {
     private params: URLSearchParams;
-    /**
-     * "finished" | "requested" Note: Won't be null
-     */
-    private type: string | null;
     public constructor() {
         const { ipcRenderer } = require("electron");
         this.params = new URLSearchParams(window.location.search);
-        this.type = this.params.get("type") ? this.params.get("type") : "finished";
 
         ipcRenderer.on("Icon", this.fillOut);
         ipcRenderer.on("savedImage", this.loadNewImageFromCache);
@@ -24,14 +19,14 @@ class IconLoader {
      * Fills the information of the received icon in the input fields
      */
     private fillOut(e: any, data: Icon): void {
-        $$("select").value = this.type;
+        $$("select").value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
         $$("input[name=title]").value = data.title;
         document.title = data.title;
         $$("input[name=description]").value = data.description;
         $$("input[name=category]").value = data.category;
         $$("input[name=package]").value = data.package;
         $$("input[name=activity]").value = data.activity;
-        $$("a").href = `../list/list.html?type=${this.type}`;
+        $$("a").href = `../list/list.html?type=${$$("select").value}`;
     }
     /**
      * Loads the image from chooseImage() after it is successfully copied
@@ -44,7 +39,7 @@ class IconLoader {
      * @param data ProjectData (only the id is needed)
      */
     private setImageSource(e: any, data: ProjectStructure): void {
-        $$("img").src = `../../projects/${data.id}/${this.type}/${$$("input[name=id]").value}.png`;
+        $$("img").src = `../../projects/${data.id}/${$$("select").value}/${$$("input[name=id]").value}.png`;
     }
     /**
      * Lets the user choose an image to load
