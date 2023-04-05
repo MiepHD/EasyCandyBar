@@ -4,21 +4,21 @@
  * Maybe there's a fix for that
 **/
 const { ipcRenderer } = require("electron"),
-    params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop)});
+    params: URLSearchParams = new URLSearchParams(window.location.search);
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (params.icon) {
-        ipcRenderer.send('getIcon', params.icon);
-        $$("input[name=id]").value = params.icon;
+    if (params.get("icon")) {
+        ipcRenderer.send('getIcon', params.get("icon"));
+        $$("input[name=id]").value = params.get("icon");
     } else {
         $$("input[name=title]").onchange = (e: any) => {
             $$("input[name=id]").value = e.target.value.toLowerCase().replace(" ", "_");
         }
     }
-    $$("select").value = params.type;
+    $$("select").value = params.get("type");
     ipcRenderer.send("getProjectInfo");
     ipcRenderer.on("ProjectInfo", (e: any, data: any) => {
-        $$("img").src = `../../projects/${data.id}/${params.type}/${$$("input[name=id]").value}.png`;
+        $$("img").src = `../../projects/${data.id}/${params.get("type")}/${$$("input[name=id]").value}.png`;
     });
     $$("a").href = `../list/list.html`;
     $$("button").addEventListener("click", () => {

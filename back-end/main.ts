@@ -1,11 +1,13 @@
+import { PathChooser } from "./PathChooser";
+import { Project } from "./Project";
+
 /**
  * Constant variables for this file
  * It is marked as duplicated declaration 'cause Typescript doesn't understand that these are different files and it has to be declared again
  * Maybe there's a fix for that
 **/
 const { app, BrowserWindow, ipcMain } = require("electron"),
-    Project = require("./Project"),
-    choose = require("./PathChooser"),
+    choose = new PathChooser(),
     fs = require("fs");
 
 //Launches the app
@@ -56,7 +58,7 @@ ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, typ
         console.log("Cleared cache.");
     }
     currentProject.setIconCategory(id, type);
-    currentProject.saveIconProperties(id, icon);
+    currentProject.fs.saveIconProperties(id, icon);
     console.log("Icon saved successfully.");
     e.reply("savedIcon");
 });

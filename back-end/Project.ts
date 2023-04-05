@@ -2,13 +2,20 @@
  * It is marked as duplicated declaration 'cause Typescript doesn't understand that these are different files and it has to be declared again
  * Maybe there's a fix for that
 **/
-class Project {
-    id: string;
-    fs: any;
-    finished: Array<string>;
-    requested: Array<string>;
-    title: string;
-    constructor(id: string) {
+/**
+ * Create an object of this class to open a project
+ * 
+ * @fs File Handler for the project
+ * @finished Ids of finished icons associated with this project
+ * @requested Ids of requested icons associated with this project
+ */
+export class Project {
+    public id: string;
+    public fs: FileHandler;
+    private finished: Array<string>;
+    private requested: Array<string>;
+    public title: string;
+    public constructor(id: string) {
         this.id = id;
         const FileHandler = require("./FileHandler");
         this.fs = new FileHandler(id);
@@ -17,13 +24,25 @@ class Project {
         this.requested = data.requested;
         this.title = data.title;
     }
-    getFinishedIcons(): Array<string> {
+    /**
+     * Loads ids of finished icons from runtime
+     * @returns ids of finished icons associated with this project
+    **/
+    public getFinishedIcons(): Array<string> {
         return this.finished;
     }
-    getRequestedIcons(): Array<string> {
+    /**
+     * Loads ids of requested icons from runtime
+     * @returns Ids of requested icons associated with this project
+     */
+    public getRequestedIcons(): Array<string> {
         return this.requested;
     }
-    setIconCategory(id: string, type: string) {
+    /**
+     * Changes the category for an icon in runtime and then saves the state
+     * @param type "requested" | "finished"
+     */
+    public setIconCategory(id: string, type: string): void {
         this.fs.moveImage(id, type);
         let target: Array<string>;
         let origin: Array<string>;
@@ -43,23 +62,19 @@ class Project {
         if (i > -1) origin.splice(i, 1);
         this.saveProjectData();
     }
-    saveIconProperties(id: string, icon: any): void {
-        this.saveProjectData();
-        this.fs.saveIconProperties(id, icon);
-    }
-    getConfig(): any {
+    public getConfig(): any {
         return JSON.parse(this.fs.read(`projects/${this.id}/config.json`));
     }
-    setConfig(data: any): void {
+    public setConfig(data: any): void {
 
     }
-    getChangelog(): any {
+    public getChangelog(): any {
         return JSON.parse(this.fs.read(`projects/${this.id}/changelog.json`));
     }
-    setChangelog(data: any): void {
+    public setChangelog(data: any): void {
 
     }
-    saveProjectData() {
+    private saveProjectData(): void {
         this.fs.write(`projects/${this.id}/project.json`, {
             "id": this.id,
             "title": this.title,
@@ -68,5 +83,3 @@ class Project {
         });
     }
 }
-
-module.exports = Project;
