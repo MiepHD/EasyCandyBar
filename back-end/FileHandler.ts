@@ -1,3 +1,4 @@
+"use strict";
 class FileHandler {
     project: string;
     fs: any;
@@ -18,5 +19,4 @@ class FileHandler {
         this.fs.writeFileSync(path, JSON.stringify(data));
     }
 }
-
 module.exports = FileHandler;
