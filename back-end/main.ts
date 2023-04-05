@@ -1,11 +1,14 @@
-import { finished } from "stream";
-
+/**
+ * Constant variables for this file
+ * It is marked as duplicated declaration 'cause Typescript doesn't understand that these are different files and it has to be declared again
+ * Maybe there's a fix for that
+**/
 const { app, BrowserWindow, ipcMain } = require("electron"),
     Project = require("./Project"),
     choose = require("./PathChooser"),
     fs = require("fs");
 
-//Start app
+//Launches the app
 const createWindow = () => {
     const win = new BrowserWindow({
         webPreferences: {
@@ -17,12 +20,15 @@ const createWindow = () => {
     });
     win.loadFile("pages/home/home.html");
 }
+
+//For closing the app
 app.whenReady().then(() => {
     createWindow();
     app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
 
+//Variables
 let currentProject: Project;
 
 ipcMain.on("openProject", (e: any, id: string) => {
@@ -49,16 +55,9 @@ ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, typ
         fs.rmSync("pages/icon/cache/", { recursive: true, force: true });
         console.log("Cleared cache.");
     }
-    if (!(fs.existsSync(`projects/${currentProject.id}/${type}/${id}.png`))) {
-        if (!(fs.existsSync(`projects/${currentProject.id}/${type}`))) fs.mkdirSync(`projects/${currentProject.id}/${type}`);
-        fs.copyFileSync(`projects/${currentProject.id}/${switchType(type)}/${id}.png`, `projects/${currentProject.id}/${type}/${id}.png`);
-        fs.unlink(`projects/${currentProject.id}/${switchType(type)}/${id}.png`, (err: Error | undefined) => {
-            if (err) throw err;
-            console.log("Successfully moved file");
-        });
-    }
     currentProject.setIconCategory(id, type);
     currentProject.saveIconProperties(id, icon);
+    console.log("Icon saved successfully.");
     e.reply("savedIcon");
 });
 
@@ -80,8 +79,10 @@ ipcMain.on("setChangelog", (e: any, data: any) => {
 
 ipcMain.on("chooseImagePath", (e: any, id: string) => {
     choose.image().then((path: string) => {
+        console.log("Loading image to cache...");
         if (!fs.existsSync("pages/icon/cache/")) fs.mkdirSync("pages/icon/cache/");
         fs.copyFileSync(path, `pages/icon/cache/${id}.png`);
+        console.log("Loaded image to cache.");
         e.reply("savedImage");
     })
 });
@@ -105,14 +106,4 @@ function ensureProject(callback: Function): void {
             callback();
         });
     } else { callback(); }
-}
-
-function switchType (type: string): string {
-    switch (type) {
-        case "finished":
-            return "requested";
-        default:
-        case "requested":
-            return "finished";
-    }
 }

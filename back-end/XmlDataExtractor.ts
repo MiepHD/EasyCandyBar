@@ -14,6 +14,7 @@ function ByProjectPath(path: string): any {
         index++;
     }
     for (const file of files) {
+        console.log(`Parsing ${file}...`);
         const filepath: string = `${path}xml/${file}.xml`,
             xml: string = fs.readFileSync(filepath, "utf8");
         if (file == "drawable") {
@@ -45,6 +46,7 @@ function ByProjectPath(path: string): any {
                 }
             });
         }
+        console.log(`Parsed ${file}.`);
     };
     return data;
 }

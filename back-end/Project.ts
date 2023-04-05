@@ -1,3 +1,7 @@
+/**
+ * It is marked as duplicated declaration 'cause Typescript doesn't understand that these are different files and it has to be declared again
+ * Maybe there's a fix for that
+**/
 class Project {
     id: string;
     fs: any;
@@ -20,6 +24,7 @@ class Project {
         return this.requested;
     }
     setIconCategory(id: string, type: string) {
+        this.fs.moveImage(id, type);
         let target: Array<string>;
         let origin: Array<string>;
         switch (type) {
