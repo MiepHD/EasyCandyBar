@@ -19,14 +19,27 @@ class Project {
     getRequestedIcons(): Array<string> {
         return this.requested;
     }
+    setIconCategory(id: string, type: string) {
+        let target: Array<string>;
+        let origin: Array<string>;
+        switch (type) {
+            default:
+            case "finished":
+                target = this.finished;
+                origin = this.requested;
+                break;
+            case "requested":
+                target = this.requested;
+                origin = this.finished;
+                break;
+        }
+        if (!(id in target)) target.push(id);
+        const i: number = origin.indexOf(id);
+        if (i > -1) origin.splice(i, 1);
+        this.saveProjectData();
+    }
     saveIconProperties(id: string, icon: any): void {
-        this.finished.push(id);
-        this.fs.write(`projects/${this.id}/project.json`, {
-            "id": this.id,
-            "title": this.title,
-            "finished": this.finished,
-            "requested": this.requested
-        });
+        this.saveProjectData();
         this.fs.saveIconProperties(id, icon);
     }
     getConfig(): any {
@@ -40,6 +53,14 @@ class Project {
     }
     setChangelog(data: any): void {
 
+    }
+    saveProjectData() {
+        this.fs.write(`projects/${this.id}/project.json`, {
+            "id": this.id,
+            "title": this.title,
+            "finished": this.finished,
+            "requested": this.requested
+        });
     }
 }
 

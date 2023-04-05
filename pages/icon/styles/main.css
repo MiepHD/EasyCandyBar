@@ -1,6 +1,7 @@
 input[name=pname],
 input[name=imagepath],
-input[name=id] { display: none; }
+input[name=id],
+input[name=imagechanged] { display: none; }
 form {
     display: grid;
 }

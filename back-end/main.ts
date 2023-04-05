@@ -1,3 +1,5 @@
+import { finished } from "stream";
+
 const { app, BrowserWindow, ipcMain } = require("electron"),
     Project = require("./Project"),
     choose = require("./PathChooser"),
@@ -47,6 +49,15 @@ ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, typ
         fs.rmSync("pages/icon/cache/", { recursive: true, force: true });
         console.log("Cleared cache.");
     }
+    if (!(fs.existsSync(`projects/${currentProject.id}/${type}/${id}.png`))) {
+        if (!(fs.existsSync(`projects/${currentProject.id}/${type}`))) fs.mkdirSync(`projects/${currentProject.id}/${type}`);
+        fs.copyFileSync(`projects/${currentProject.id}/${switchType(type)}/${id}.png`, `projects/${currentProject.id}/${type}/${id}.png`);
+        fs.unlink(`projects/${currentProject.id}/${switchType(type)}/${id}.png`, (err: Error | undefined) => {
+            if (err) throw err;
+            console.log("Successfully moved file");
+        });
+    }
+    currentProject.setIconCategory(id, type);
     currentProject.saveIconProperties(id, icon);
     e.reply("savedIcon");
 });
@@ -69,13 +80,22 @@ ipcMain.on("setChangelog", (e: any, data: any) => {
 
 ipcMain.on("chooseImagePath", (e: any, id: string) => {
     choose.image().then((path: string) => {
-        if (!fs.existsSync("pages/icon/cache/")){ fs.mkdirSync("pages/icon/cache/")}
+        if (!fs.existsSync("pages/icon/cache/")) fs.mkdirSync("pages/icon/cache/");
         fs.copyFileSync(path, `pages/icon/cache/${id}.png`);
         e.reply("savedImage");
     })
 });
 
-function ensureProject(callback: Function) {
+ipcMain.on("getProjectInfo", (e: any) => {
+    ensureProject(() => {
+        e.reply("ProjectInfo", {
+            "id": currentProject.id,
+            "title": currentProject.title
+        })
+    })
+});
+
+function ensureProject(callback: Function): void {
     if (!(currentProject)) {
         choose.dir().then((path: string) => {
             const folders: Array<string> = path.split("\\");
@@ -87,11 +107,12 @@ function ensureProject(callback: Function) {
     } else { callback(); }
 }
 
-ipcMain.on("getProjectInfo", (e: any) => {
-    ensureProject(() => {
-        e.reply("ProjectInfo", {
-            "id": currentProject.id,
-            "title": currentProject.title
-        })
-    })
-});
+function switchType (type: string): string {
+    switch (type) {
+        case "finished":
+            return "requested";
+        default:
+        case "requested":
+            return "finished";
+    }
+}

@@ -1,11 +1,6 @@
 const { ipcRenderer } = require("electron"),
     params = new Proxy(new URLSearchParams(window.location.search), { get: (searchParams, prop) => searchParams.get(prop)});
 
-let project: string;
-ipcRenderer.send("getProjectInfo");
-ipcRenderer.on("ProjectInfo", (data: any) => {
-    project = data.id;
-});
 document.addEventListener("DOMContentLoaded", () => {
     if (params.icon) {
         ipcRenderer.send('getIcon', params.icon);
@@ -15,8 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
             $$("input[name=id]").value = e.target.value.toLowerCase().replace(" ", "_");
         }
     }
-    $$("input[name=type]").value = params.type;
-    $$("img").src = `../../projects/${project}/${params.type}/${$$("input[name=id]").value}.png`;
+    $$("select").value = params.type;
+    ipcRenderer.send("getProjectInfo");
+    ipcRenderer.on("ProjectInfo", (e: any, data: any) => {
+        $$("img").src = `../../projects/${data.id}/${params.type}/${$$("input[name=id]").value}.png`;
+    });
     $$("a").href = `../list/list.html`;
     $$("button").addEventListener("click", () => {
         const id = $$("input[name=id]").value;
