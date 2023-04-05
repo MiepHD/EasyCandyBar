@@ -1,7 +1,5 @@
-/**
- * It is marked as duplicated declaration 'cause Typescript doesn't understand that these are different files and it has to be declared again
- * Maybe there's a fix for that
-**/
+import { FileHandler } from "./FileHandler";
+
 /**
  * Create an object of this class to open a project
  * 
@@ -10,16 +8,15 @@
  * @requested Ids of requested icons associated with this project
  */
 export class Project {
-    public id: string;
-    public fs: FileHandler;
+    public readonly id: string;
+    public readonly fs: FileHandler;
     private finished: Array<string>;
     private requested: Array<string>;
     public title: string;
     public constructor(id: string) {
         this.id = id;
-        const FileHandler = require("./FileHandler");
         this.fs = new FileHandler(id);
-        const data = this.fs.read(`projects/${id}/project.json`);
+        const data: ProjectStructure = this.fs.read(`projects/${id}/project.json`);
         this.finished = data.finished;
         this.requested = data.requested;
         this.title = data.title;
@@ -39,7 +36,7 @@ export class Project {
         return this.requested;
     }
     /**
-     * Changes the category for an icon in runtime and then saves the state
+     * Changes the category for an icon in runtime and then saves the state. If it is already in the right category it does nothing
      * @param type "requested" | "finished"
      */
     public setIconCategory(id: string, type: string): void {
@@ -48,6 +45,7 @@ export class Project {
         let origin: Array<string>;
         switch (type) {
             default:
+                throw "Invalid type";
             case "finished":
                 target = this.finished;
                 origin = this.requested;
@@ -57,16 +55,20 @@ export class Project {
                 origin = this.finished;
                 break;
         }
-        if (!(id in target)) target.push(id);
+        if (!(target.includes(id))) target.push(id);
         const i: number = origin.indexOf(id);
         if (i > -1) origin.splice(i, 1);
         this.saveProjectData();
     }
-    public getConfig(): any {
+    /**
+     * Reads project's configuration from file
+     * @returns Configuration for project
+     */
+    public getConfig(): Configuration {
         return JSON.parse(this.fs.read(`projects/${this.id}/config.json`));
     }
-    public setConfig(data: any): void {
-
+    public setConfig(data: Configuration): void {
+        this.fs.write(`projects/${this.id}/config.json`, data);
     }
     public getChangelog(): any {
         return JSON.parse(this.fs.read(`projects/${this.id}/changelog.json`));
@@ -74,6 +76,9 @@ export class Project {
     public setChangelog(data: any): void {
 
     }
+    /**
+     * Saves current project data to project.json
+     */
     private saveProjectData(): void {
         this.fs.write(`projects/${this.id}/project.json`, {
             "id": this.id,

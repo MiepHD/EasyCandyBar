@@ -1,13 +1,7 @@
 import { PathChooser } from "./PathChooser";
 import { Project } from "./Project";
 
-/**
- * Constant variables for this file
- * It is marked as duplicated declaration 'cause Typescript doesn't understand that these are different files and it has to be declared again
- * Maybe there's a fix for that
-**/
 const { app, BrowserWindow, ipcMain } = require("electron"),
-    choose = new PathChooser(),
     fs = require("fs");
 
 //Launches the app
@@ -37,12 +31,18 @@ ipcMain.on("openProject", (e: any, id: string) => {
     currentProject = new Project(id);
 });
 
-ipcMain.on("getFinishedIcons", (e: any) => {
-    e.reply("Icons", currentProject.getFinishedIcons());
-});
-
-ipcMain.on("getRequestedIcons", (e: any) => {
-    e.reply("Icons", currentProject.getRequestedIcons());
+ipcMain.on("getIcons", (e: any, type: string) => {
+    ensureProject(() => {
+        switch (type) {
+            case "requested":
+                e.reply("Icons", currentProject.getRequestedIcons());
+                break;
+            default:
+            case "finished":
+                e.reply("Icons", currentProject.getFinishedIcons());
+                break;
+        }
+    });
 });
 
 ipcMain.on("getIcon", (e: any, id: string) => {
@@ -80,6 +80,7 @@ ipcMain.on("setChangelog", (e: any, data: any) => {
 });
 
 ipcMain.on("chooseImagePath", (e: any, id: string) => {
+    const choose: PathChooser = new PathChooser();
     choose.image().then((path: string) => {
         console.log("Loading image to cache...");
         if (!fs.existsSync("pages/icon/cache/")) fs.mkdirSync("pages/icon/cache/");
@@ -100,6 +101,7 @@ ipcMain.on("getProjectInfo", (e: any) => {
 
 function ensureProject(callback: Function): void {
     if (!(currentProject)) {
+        const choose: PathChooser = new PathChooser();
         choose.dir().then((path: string) => {
             const folders: Array<string> = path.split("\\");
             const id: string = folders[folders.length - 1];
