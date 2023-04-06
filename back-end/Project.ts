@@ -1,4 +1,4 @@
-import { FileHandler } from "./FileHandler";
+import { ProjectFileHandler } from "./ProjectFileHandler";
 
 /**
  * Create an object of this class to open a project
@@ -9,13 +9,13 @@ import { FileHandler } from "./FileHandler";
  */
 export class Project {
     public readonly id: string;
-    public readonly fs: FileHandler;
+    public readonly fs: ProjectFileHandler;
     private finished: Array<string>;
     private requested: Array<string>;
     public title: string;
     public constructor(id: string) {
         this.id = id;
-        this.fs = new FileHandler(id);
+        this.fs = new ProjectFileHandler(id);
         const data: ProjectStructure = this.fs.read(`projects/${id}/project.json`);
         this.finished = data.finished;
         this.requested = data.requested;

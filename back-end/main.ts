@@ -1,5 +1,6 @@
 import { PathChooser } from "./PathChooser";
 import { Project } from "./Project";
+import { FileHandler } from "./FileHandler";
 
 const { app, BrowserWindow, ipcMain } = require("electron"),
     fs = require("fs");
@@ -98,6 +99,10 @@ ipcMain.on("getProjectInfo", (e: any) => {
         })
     })
 });
+
+ipcMain.on("GET", (e: any, path: string) => {
+    e.reply("GETResponse", new FileHandler().read(path));
+})
 
 function ensureProject(callback: Function): void {
     if (!(currentProject)) {
