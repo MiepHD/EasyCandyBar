@@ -26,4 +26,7 @@ class ListLoader {
         }
     }
 }
-document.addEventListener("DOMContentLoaded", () => { new ListLoader(); });
+document.addEventListener("DOMContentLoaded", () => {
+    new ListLoader();
+    new SidebarLoader();
+});

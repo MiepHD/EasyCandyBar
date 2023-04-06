@@ -69,4 +69,7 @@ class IconLoader {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => { new IconLoader(); });
+document.addEventListener("DOMContentLoaded", () => {
+    new IconLoader();
+    new SidebarLoader();
+});
