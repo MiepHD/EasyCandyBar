@@ -1,5 +1,25 @@
 nav {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
     position: fixed;
     height: 100%;
     width: auto;
+    background-color: darkgray;
+}
+nav div button {
+    margin-left: auto;
+    width: 5ch;
+    height: 5ch;
+}
+#navigation div,
+nav div:has(button) {
+    padding: 0.75ch 1.5ch;
+    height: 5ch;
+    display: grid;
+    grid-template-columns: auto 5ch;
+}
+.title {
+    margin: auto 1ch;
+    height: min-content;
 }
