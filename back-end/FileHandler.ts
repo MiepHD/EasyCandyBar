@@ -13,6 +13,9 @@ export class FileHandler {
     public write(path: string, data: any): void {
         this.fs.writeFileSync(path, JSON.stringify(data));
     }
+    /**
+     * Opens a folder in the explorer
+     */
     public openFolder(path: string): void {
         this.child_process.exec(`explorer "${process.cwd()}\\${this.path.normalize(path)}"`);
     }

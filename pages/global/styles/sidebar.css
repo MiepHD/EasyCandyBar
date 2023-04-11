@@ -11,6 +11,10 @@ nav div button {
     margin-left: auto;
     width: 5ch;
     height: 5ch;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    cursor: pointer;
 }
 #navigation div,
 nav div:has(button) {
@@ -22,4 +26,7 @@ nav div:has(button) {
 .title {
     margin: auto 1ch;
     height: min-content;
+}
+.x {
+    rotate: 45deg;
 }
