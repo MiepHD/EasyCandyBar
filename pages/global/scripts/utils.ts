@@ -3,11 +3,9 @@
  * Note: Returns no array if there's only one
  * @returns NodeListOf<Element> | undefined | Element
  */
+function $n(query: string): any {
+    return document.querySelectorAll(query);
+}
 function $$(query: string): any {
-    const result = document.querySelectorAll(query);
-    switch (result.length) {
-        case 0: return undefined;
-        case 1: return result[0];
-        default: return result;
-    }
+    return document.querySelector(query);
 }

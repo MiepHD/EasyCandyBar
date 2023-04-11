@@ -9,8 +9,11 @@ class IconLoader {
 
         ipcRenderer.on("Icon", this.fillOut);
         ipcRenderer.on("savedImage", this.loadNewImageFromCache);
-        ipcRenderer.on("ProjectInfo", this.setImageSource);
-        $$("button").addEventListener("click", () => { this.chooseImage(ipcRenderer); });
+        ipcRenderer.on("ProjectInfo", (e: any, data: ProjectStructure) => {
+            new SidebarLoader(data.title);
+            this.setImageSource(data);
+        });
+        $$("button")?.addEventListener("click", () => { this.chooseImage(ipcRenderer); });
 
         ipcRenderer.send("getProjectInfo");
         this.requestData(ipcRenderer);
@@ -19,14 +22,15 @@ class IconLoader {
      * Fills the information of the received icon in the input fields
      */
     private fillOut(e: any, data: Icon): void {
-        $$("select").value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
+        const typeselector = $$("select");
+        if (typeselector) typeselector.value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
         $$("input[name=title]").value = data.title;
         document.title = data.title;
         $$("input[name=description]").value = data.description;
         $$("input[name=category]").value = data.category;
         $$("input[name=package]").value = data.package;
         $$("input[name=activity]").value = data.activity;
-        $$("a").href = `../list/list.html?type=${$$("select").value}`;
+        $$("a").href = `../list/list.html?type=${typeselector.value}`;
     }
     /**
      * Loads the image from chooseImage() after it is successfully copied
@@ -38,7 +42,7 @@ class IconLoader {
     /**
      * @param data ProjectData (only the id is needed)
      */
-    private setImageSource(e: any, data: ProjectStructure): void {
+    private setImageSource(data: ProjectStructure): void {
         $$("img").src = `../../projects/${data.id}/${$$("select").value}/${$$("input[name=id]").value}.png`;
     }
     /**
@@ -71,5 +75,4 @@ class IconLoader {
 
 document.addEventListener("DOMContentLoaded", () => {
     new IconLoader();
-    new SidebarLoader();
 });

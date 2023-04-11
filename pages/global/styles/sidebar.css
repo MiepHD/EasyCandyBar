@@ -6,6 +6,16 @@ nav {
     height: 100%;
     width: auto;
     background-color: darkgray;
+    left: calc(-1 * var(--distance));
+}
+nav[state=shown] {animation: showSidebar .5s cubic-bezier(0.5, -0.46, 0, 0.97) forwards;}
+nav[state=hidden] {animation: hideSidebar .5s cubic-bezier(0, 0.97, 0.5, -0.46) forwards;}
+@keyframes showSidebar {
+    100% { translate: var(--distance) 0 }
+}
+@keyframes hideSidebar {
+    0% { translate: var(--distance) 0 }
+    100% { translate: 0 0 }
 }
 nav div button {
     margin-left: auto;
