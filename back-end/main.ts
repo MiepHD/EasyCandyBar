@@ -1,9 +1,10 @@
 import { PathChooser } from "./PathChooser";
 import { Project } from "./Project";
 import { FileHandler } from "./FileHandler";
+import { ProjectConverter } from "./ProjectConverter";
 
 const { app, BrowserWindow, ipcMain } = require("electron"),
-    fs = require("fs");
+    fs: FileHandler = new FileHandler();
 
 //Launches the app
 const createWindow = () => {
@@ -12,7 +13,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			contextIsolation: false
 		},
-        width: 800, 
+        width: 800,
         height: 600
     });
     win.loadFile("pages/home/home.html");
@@ -44,7 +45,18 @@ ipcMain.on("openFolder", (e: any, type: string) => {
                 break;
         }
     });
-})
+});
+
+ipcMain.on("importRequest", (e: any) => {
+    new PathChooser().zip().then((path: string) => {
+        console.log("Loading zip to cache...");
+        fs.newDir("cache/").then(() => {
+            fs.copyFile(path, `cache/request.zip`).then(() => {
+                console.log("Loaded zip to cache.");
+            });
+        });
+    });
+});
 
 ipcMain.on("getIcons", (e: any, type: string) => {
     ensureProject(() => {
@@ -67,10 +79,12 @@ ipcMain.on("getIcon", (e: any, id: string) => {
 ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, type: string) => {
     if (imagechanged) {
         console.log("Copying new file...");
-        fs.copyFileSync(`pages/icon/cache/${id}.png`, `projects/${currentProject.id}/${type}/${id}.png`);
-        console.log("Copied new file.\nClearing cache...");
-        fs.rmSync("pages/icon/cache/", { recursive: true, force: true });
-        console.log("Cleared cache.");
+        fs.copyFile(`pages/icon/cache/${id}.png`, `projects/${currentProject.id}/${type}/${id}.png`).then(() => {
+            console.log("Copied new file.\nClearing cache...");
+            fs.deleteDir("pages/icon/cache/").then(() => {
+                console.log("Cleared cache.");
+            });
+        });
     }
     currentProject.setIconCategory(id, type);
     currentProject.fs.saveIconProperties(id, icon);
@@ -95,13 +109,14 @@ ipcMain.on("setChangelog", (e: any, data: any) => {
 });
 
 ipcMain.on("chooseImagePath", (e: any, id: string) => {
-    const choose: PathChooser = new PathChooser();
-    choose.image().then((path: string) => {
+    new PathChooser().image().then((path: string) => {
         console.log("Loading image to cache...");
-        if (!fs.existsSync("pages/icon/cache/")) fs.mkdirSync("pages/icon/cache/");
-        fs.copyFileSync(path, `pages/icon/cache/${id}.png`);
-        console.log("Loaded image to cache.");
-        e.reply("savedImage");
+        fs.newDir("pages/icon/cache/").then(() => {
+            fs.copyFile(path, `pages/icon/cache/${id}.png`).then(() => {
+                console.log("Loaded image to cache.");
+                e.reply("savedImage");
+            });
+        });
     })
 });
 
@@ -110,8 +125,8 @@ ipcMain.on("getProjectInfo", (e: any) => {
         e.reply("ProjectInfo", {
             "id": currentProject.id,
             "title": currentProject.title
-        })
-    })
+        });
+    });
 });
 
 ipcMain.on("GET", (e: any, path: string) => {
@@ -120,13 +135,13 @@ ipcMain.on("GET", (e: any, path: string) => {
 
 function ensureProject(callback: Function): void {
     if (!(currentProject)) {
-        const choose: PathChooser = new PathChooser();
-        choose.dir().then((path: string) => {
+        new PathChooser().dir().then((path: string) => {
             const folders: Array<string> = path.split("\\");
             const id: string = folders[folders.length - 1];
-            if (!(fs.existsSync(`${path}/project.json`))) { require("./ProjectConverter")(path); }
-            currentProject = new Project(id);
-            callback();
+            if (fs.isProject(path)) { new ProjectConverter().convert(path).then(() => {
+                currentProject = new Project(id);
+                callback();
+            }); }
         });
     } else { callback(); }
 }

@@ -1,3 +1,5 @@
+import { XmlDeclarationAttributes } from "xml2js";
+
 /**
  * Extracts data from XML Files
  */

@@ -2,12 +2,12 @@ import { XmlDataExtractor } from "./XmlDataExtractor";
 /**
  * Converts a Candybar project or another icon-pack that has the same structure to an EasyCandyBar project
  */
-class ProjectConverter {
+export class ProjectConverter {
     /**
      * Converts a Candybar project or another icon-pack that has the same structure to an EasyCandyBar project
      * @param path Path to the Project which contains the /app/
      */
-    public convert(path: string): void {
+    public async convert(path: string): Promise<void> {
         const fs: any = require("fs-extra");
 
         const data: any = new XmlDataExtractor().ByProjectPath(path),
@@ -18,7 +18,7 @@ class ProjectConverter {
         fs.copySync(`${path}/app/src/main/res/drawable-nodpi`, `projects/${id}/finished`);
 
         console.log("Copied images.\nGenerating icon's properties...");
-        if (!fs.existsSync(`projects/${id}/properties/`)){ fs.mkdirSync(`projects/${id}/properties/`)}
+        if (!fs.existsSync(`projects/${id}/properties/`)){ fs.mkdirSync(`projects/${id}/properties/`); }
         for (const key of Object.keys(data)) {
             fs.writeFileSync(`projects/${id}/properties/${key}.json`, JSON.stringify(data[key]));
         }
@@ -44,5 +44,3 @@ class ProjectConverter {
         return folders[folders.length - 1];
     }
 }
-
-module.exports = new ProjectConverter().convert;
