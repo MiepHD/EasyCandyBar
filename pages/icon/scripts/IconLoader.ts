@@ -2,9 +2,11 @@
  * Loads information about the icon into the input fields if specified
  */
 class IconLoader {
-    private params: URLSearchParams;
+    private readonly params: URLSearchParams;
+    private readonly ipcRenderer: any;
     public constructor() {
         const { ipcRenderer } = require("electron");
+        this.ipcRenderer = ipcRenderer;
         this.params = new URLSearchParams(window.location.search);
 
         ipcRenderer.on("Icon", this.fillOut);
@@ -13,15 +15,15 @@ class IconLoader {
             new SidebarLoader(data.title);
             this.setImageSource(data);
         });
-        $$("button")?.addEventListener("click", () => { this.chooseImage(ipcRenderer); });
+        $$("button")?.addEventListener("click", this.chooseImage.bind(this));
 
         ipcRenderer.send("getProjectInfo");
-        this.requestData(ipcRenderer);
+        this.requestData();
     }
     /**
      * Fills the information of the received icon in the input fields
      */
-    private fillOut(e: any, data: Icon): void {
+    private async fillOut(e: any, data: Icon): Promise<void> {
         const typeselector = $$("select");
         if (typeselector) typeselector.value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
         $$("input[name=title]").value = data.title;
@@ -35,7 +37,7 @@ class IconLoader {
     /**
      * Loads the image from chooseImage() after it is successfully copied
      */
-    private loadNewImageFromCache(): void {
+    private async loadNewImageFromCache(): Promise<void> {
         $$("img").src = `cache/${$$("input[name=id]").value}.png`;
         $$("input[name=imagechanged]").checked = true;
     }
@@ -48,9 +50,9 @@ class IconLoader {
     /**
      * Lets the user choose an image to load
      */
-    private chooseImage(ipcRenderer: any): void {
+    private chooseImage(): void {
         const id: string = $$("input[name=id]").value;
-        if (id&&id!="") { ipcRenderer.send("chooseImagePath", id); }
+        if (id&&id!="") { this.ipcRenderer.send("chooseImagePath", id); }
         else {
             /**
              * To-do: Show this on page
@@ -61,9 +63,9 @@ class IconLoader {
     /**
      * Requests data for an icon if it's id is specified in params
      */
-    private requestData(ipcRenderer: any): void {
+    private requestData(): void {
         if (this.params.get("icon")) {
-            ipcRenderer.send('getIcon', this.params.get("icon"));
+            this.ipcRenderer.send('getIcon', this.params.get("icon"));
             $$("input[name=id]").value = this.params.get("icon");
         } else {
             $$("input[name=title]").onchange = (e: any) => {
