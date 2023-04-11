@@ -32,6 +32,20 @@ ipcMain.on("openProject", (e: any, id: string) => {
     currentProject = new Project(id);
 });
 
+ipcMain.on("openFolder", (e: any, type: string) => {
+    ensureProject(() => {
+        switch (type) {
+            case "requested":
+                new FileHandler().openFolder(`projects/${currentProject.id}/requested`);
+                break;
+            default:
+            case "finished":
+                new FileHandler().openFolder(`projects/${currentProject.id}/finished`);
+                break;
+        }
+    });
+})
+
 ipcMain.on("getIcons", (e: any, type: string) => {
     ensureProject(() => {
         switch (type) {

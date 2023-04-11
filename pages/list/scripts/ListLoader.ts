@@ -5,11 +5,13 @@ class ListLoader {
         this.params = new URLSearchParams(window.location.search);
 
         ipcRenderer.on("ProjectInfo", (e: any, info: ProjectStructure) => {
+            $$("button").addEventListener("click", () => { ipcRenderer.send("openFolder", this.params.get("type")); });
+            new SidebarLoader();
             document.title = info.title;
             ipcRenderer.on('Icons', (event: any, data: Array<string>) => {
                 this.addIcons(info.id, data);
             });
-            ipcRenderer.send('getIcons');
+            ipcRenderer.send('getIcons', this.params.get("type"));
         });
         ipcRenderer.send("getProjectInfo");
     }
@@ -28,5 +30,4 @@ class ListLoader {
 }
 document.addEventListener("DOMContentLoaded", () => {
     new ListLoader();
-    new SidebarLoader();
 });
