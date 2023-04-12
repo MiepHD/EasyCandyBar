@@ -9,9 +9,9 @@ class IconLoader {
         this.ipcRenderer = ipcRenderer;
         this.params = new URLSearchParams(window.location.search);
 
-        ipcRenderer.on("Icon", this.fillOut);
+        ipcRenderer.on("Icon", this.fillOut.bind(this));
         ipcRenderer.on("savedImage", this.loadNewImageFromCache);
-        $$("button")?.addEventListener("click", this.chooseImage.bind(this));
+        $$("#chooser")?.addEventListener("click", this.chooseImage.bind(this));
         this.requestData();
     }
     /**
@@ -22,7 +22,7 @@ class IconLoader {
             new SidebarLoader(data.title);
             this.setImageSource(data);
         });
-        ipcRenderer.send("getProjectInfo");
+        this.ipcRenderer.send("getProjectInfo");
         const typeselector = $$("select");
         if (typeselector) typeselector.value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
         $$("input[name=title]").value = data.title;
@@ -31,20 +31,20 @@ class IconLoader {
         $$("input[name=category]").value = data.category;
         $$("input[name=package]").value = data.package;
         $$("input[name=activity]").value = data.activity;
-        $$("a").href = `../list/list.html?type=${typeselector.value}`;
+        $$("#cancel").href = `../list/list.html?type=${typeselector.value}`;
     }
     /**
      * Loads the image from chooseImage() after it is successfully copied
      */
     private async loadNewImageFromCache(): Promise<void> {
-        $$("img").src = `cache/${$$("input[name=id]").value}.png`;
+        $$("#chooser > img").src = `cache/${$$("input[name=id]").value}.png`;
         $$("input[name=imagechanged]").checked = true;
     }
     /**
      * @param data ProjectData (only the id is needed)
      */
     private setImageSource(data: ProjectStructure): void {
-        $$("img").src = `../../projects/${data.id}/${$$("select").value}/${$$("input[name=id]").value}.png`;
+        $$("#chooser > img").src = `../../projects/${data.id}/${$$("select").value}/${$$("input[name=id]").value}.png`;
     }
     /**
      * Lets the user choose an image to load
