@@ -4,33 +4,26 @@ EasyCandybar is an app to create Android icon-packs. It's mission is to allow ev
 It's build with node.js using electron and Typescript. For saving data json is used.
 
 # Features
--List of finished icons
-
--Icon page with editable information
-
--Import from Candybar or similar project
+- List of finished icons
+- List of requested icons
+- Icon page with editable information
+- Import from Candybar or similar project
+- Import an icon request
 
 # To-Do:
--List of requested icons
 
--Config editor
-
--Changelog generator
-
--Package to aab and apk
-
+- Config editor
+- Changelog generator
+- Package to aab and apk
+- Watch activity changes?
+- Webpage generator?
 
 # Icon
 An Icon consists of these attributes:
 
--Title/Name
-
--ID
-
--Image
-
--Category
-
--Activity
-
--Package
+- Title/Name
+- ID
+- Image
+- Category
+- Activity
+- Package
