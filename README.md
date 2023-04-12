@@ -23,6 +23,7 @@ An Icon consists of these attributes:
 
 - Title/Name
 - ID
+- (Description)
 - Image
 - Category
 - Activity
