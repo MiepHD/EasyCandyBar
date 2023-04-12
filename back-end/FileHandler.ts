@@ -25,7 +25,7 @@ export class FileHandler {
         if (!this.fs.existsSync(path)) await this.fs.rmSync(path, { recursive: true, force: true });
     }
     public isProject(path: string): boolean {
-        return !(this.fs.existsSync(`${path}/project.json`));
+        return this.fs.existsSync(`${path}/project.json`);
     }
     /**
      * Opens a folder in the explorer

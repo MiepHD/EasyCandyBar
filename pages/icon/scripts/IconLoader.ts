@@ -11,19 +11,18 @@ class IconLoader {
 
         ipcRenderer.on("Icon", this.fillOut);
         ipcRenderer.on("savedImage", this.loadNewImageFromCache);
-        ipcRenderer.on("ProjectInfo", (e: any, data: ProjectStructure) => {
-            new SidebarLoader(data.title);
-            this.setImageSource(data);
-        });
         $$("button")?.addEventListener("click", this.chooseImage.bind(this));
-
-        ipcRenderer.send("getProjectInfo");
         this.requestData();
     }
     /**
      * Fills the information of the received icon in the input fields
      */
     private async fillOut(e: any, data: Icon): Promise<void> {
+        this.ipcRenderer.on("ProjectInfo", (e: any, data: ProjectStructure) => {
+            new SidebarLoader(data.title);
+            this.setImageSource(data);
+        });
+        ipcRenderer.send("getProjectInfo");
         const typeselector = $$("select");
         if (typeselector) typeselector.value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
         $$("input[name=title]").value = data.title;
