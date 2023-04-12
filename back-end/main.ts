@@ -62,6 +62,7 @@ ipcMain.on("importRequest", (e: any) => {
                             currentProject.fs.saveIconProperties(icon, data[icon]);
                         }
                         fs.deleteDir("cache");
+                        e.reply("importedIcons");
                     });
                 });
             });

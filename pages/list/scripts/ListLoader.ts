@@ -46,7 +46,12 @@ class ListLoader {
     private loadProject(): void {
         this.ipcRenderer.on("ProjectInfo", (e: any, info: ProjectStructure) => {
             $$("#open").addEventListener("click", () => { this.ipcRenderer.send("openFolder", this.params.get("type")); });
-            $$("#import").addEventListener("click", () => { this.ipcRenderer.send("importRequest"); });
+            $$("#import").addEventListener("click", () => {
+                this.ipcRenderer.on("importedIcons", () => {
+                    location.reload();
+                });
+                this.ipcRenderer.send("importRequest");
+            });
             new SidebarLoader(info.title);
             document.title = info.title;
             this.addIcons(info.id);
