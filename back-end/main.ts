@@ -150,13 +150,9 @@ function ensureProject(callback: Function): void {
         new PathChooser().dir().then((path: string) => {
             const folders: Array<string> = path.split("\\");
             const id: string = folders[folders.length - 1];
-            if (!(fs.isProject(path))) { convert.project(path).then(() => {
-                currentProject = new Project(id);
-                callback();
-            })} else {
-                currentProject = new Project(id);
-                callback();
-            }
+            if (!(fs.isProject(path))) { convert.project(path); }
+            currentProject = new Project(id);
+            callback();
         });
     } else { callback(); }
 }

@@ -11,7 +11,7 @@ export class DataConverter {
      * Converts a Candybar project or another icon-pack that has the same structure to an EasyCandyBar project
      * @param path Path to the Project which contains the /app/
      */
-    public async project(path: string): Promise<void> {
+    public project(path: string): void {
         const data: any = new XmlDataExtractor().ByProjectPath(`${path}/app/src/main/res/xml/`),
             finished: Array<string> = Object.getOwnPropertyNames(data),
             id: string = this.extractFolderName(path);
