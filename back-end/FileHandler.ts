@@ -12,8 +12,8 @@ export class FileHandler {
     public read(path: string): string {
         return this.fs.readFileSync(path, { encoding: "utf8" });
     }
-    public async write(path: string, data: any): Promise<void> {
-        await this.fs.writeFile(path, JSON.stringify(data));
+    public write(path: string, data: any): void {
+        this.fs.writeFileSync(path, JSON.stringify(data));
     }
     /**
      * Creates a new directory if it doesn't already exist
@@ -35,7 +35,7 @@ export class FileHandler {
     }
     public async extractZip(path: string): Promise<void> {
         const zip = new this.StreamZip.async({ file: path });
-        this.fs.mkdirSync("cache/extracted");
+        this.newDir("cache/extracted");
         await zip.extract(null, "./cache/extracted");
         await zip.close();
     }

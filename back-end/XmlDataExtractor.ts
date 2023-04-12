@@ -13,22 +13,42 @@ export class XmlDataExtractor {
         this.data = {};
     }
     /**
+     * Brings the comment with the corresponding icon together in one line
+     * @returns Edited string
+     */
+    private commentAndObjectTogether(xml: string): string {
+        let count: number = 0;
+        let result: string = "";
+        for (let i: number = 0; i < xml.length; i++) {
+            if (xml[i] === "\n") {
+                count++;
+                if (count === 3) {
+                    count = 0;
+                    continue;
+                }
+            }
+            result += xml[i];
+        }
+        return result;
+    }
+    /**
      * Automatically searches for xml files in project
      * @param path Project path
      * @returns All icons with it's data as an object
      */
     public ByProjectPath(path: string): any {
-        const files: Array<string> = ["drawable", "appfilter", "theme_resources", "appmap"];
-        let index: number = 0;
-        path = `${path}/app/src/main/res/`;
-        for (const file of files) {
-            if (!(this.fs.existsSync(`${path}xml/${file}.xml`))) files.splice(index);
-            index++;
+        const search: Array<string> = ["drawable", "appfilter", "theme_resources", "appmap"];
+        const files: Array<string> = [];
+        for (const file of search) {
+            const x = `${path}${file}.xml`;
+            console.log(x);
+            if (this.fs.existsSync(x)) files.push(file);
         }
         for (const file of files) {
             console.log(`Parsing ${file}...`);
-            const filepath: string = `${path}xml/${file}.xml`,
+            const filepath: string = `${path}${file}.xml`,
                 xml: string = this.fs.readFileSync(filepath, "utf8");
+            if ((!(files.includes("drawable"))) && file.includes("appfilter")) this.parseDrawable(this.commentAndObjectTogether(xml));
             if (file == "drawable") {
                 this.parseDrawable(xml);
             } else {
@@ -40,6 +60,7 @@ export class XmlDataExtractor {
                             const othername: string = dict[file]["other"],
                                 other: string = item.$[othername],
                                 drawable: string = item.$[dict[file]["drawable"]];
+                            if (!(drawable)) continue;
                             let packnactiv: Array<string>;
                             switch(file) {
                                 case "appfilter":
@@ -71,8 +92,12 @@ export class XmlDataExtractor {
         for (const line of xml.split("\n")) {
             if (line.includes("category")) { category = line.split('"')[1]; }
             else if (line.includes("item")) {
-                const drawable: string = line.split('"')[1],
-                    title: string = this.getComment(line);
+                let drawable: string;
+                const splitted: Array<string> = line.split('"');
+                if (line.includes("component")) { drawable = splitted[3]; }
+                else { drawable = splitted[1]; }
+                if (drawable.includes(":")) continue;
+                const title: string = this.getComment(line);
                 this.data[drawable] = {
                     "category": category,
                     "title": title

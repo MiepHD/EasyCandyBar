@@ -1,10 +1,11 @@
 import { PathChooser } from "./PathChooser";
 import { Project } from "./Project";
 import { FileHandler } from "./FileHandler";
-import { ProjectConverter } from "./ProjectConverter";
+import { DataConverter } from "./DataConverter";
 
 const { app, BrowserWindow, ipcMain } = require("electron"),
-    fs: FileHandler = new FileHandler();
+    fs: FileHandler = new FileHandler(),
+    convert: DataConverter = new DataConverter();
 
 //Launches the app
 const createWindow = () => {
@@ -51,8 +52,18 @@ ipcMain.on("importRequest", (e: any) => {
     new PathChooser().zip().then((path: string) => {
         console.log("Loading zip to cache...");
         fs.newDir("cache/").then(() => {
-            fs.copyFile(path, `cache/request.zip`).then(() => {
+            fs.copyFile(path, "cache/request.zip").then(() => {
                 console.log("Loaded zip to cache.");
+                fs.extractZip("cache/request.zip").then(() => {
+                    convert.request("cache/extracted/", currentProject.id).then((data: any) => {
+                        console.log(data);
+                        for (const icon of Object.getOwnPropertyNames(data)) {
+                            currentProject.setIconCategory(icon, "requested");
+                            currentProject.fs.saveIconProperties(icon, data[icon]);
+                        }
+                        fs.deleteDir("cache");
+                    });
+                });
             });
         });
     });
@@ -138,7 +149,7 @@ function ensureProject(callback: Function): void {
         new PathChooser().dir().then((path: string) => {
             const folders: Array<string> = path.split("\\");
             const id: string = folders[folders.length - 1];
-            if (fs.isProject(path)) { new ProjectConverter().convert(path).then(() => {
+            if (fs.isProject(path)) { convert.project(path).then(() => {
                 currentProject = new Project(id);
                 callback();
             }); }

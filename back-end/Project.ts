@@ -76,6 +76,10 @@ export class Project {
     public setChangelog(data: any): void {
 
     }
+    public saveIcon(id: string, data: FragmentedIcon) {
+        const icon: Icon = new Icon(data);
+        this.fs.saveIconProperties(id, icon);
+    }
     /**
      * Saves current project data to project.json
      */
