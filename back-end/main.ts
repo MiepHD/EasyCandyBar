@@ -150,9 +150,17 @@ function ensureProject(callback: Function): void {
         new PathChooser().dir().then((path: string) => {
             const folders: Array<string> = path.split("\\");
             const id: string = folders[folders.length - 1];
-            if (!(fs.isProject(path))) { convert.project(path); }
-            currentProject = new Project(id);
-            callback();
+            switch (fs.getProjectType(path)) {
+                default:
+                case "none":
+                    ensureProject(callback);
+                    break;
+                case "pack":
+                    convert.project(path);
+                case "project":
+                    currentProject = new Project(id);
+                    callback();
+            }
         });
     } else { callback(); }
 }

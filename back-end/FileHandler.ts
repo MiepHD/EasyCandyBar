@@ -24,8 +24,10 @@ export class FileHandler {
     public async deleteDir(path: string): Promise<void> {
         if (!this.fs.existsSync(path)) await this.fs.rmSync(path, { recursive: true, force: true });
     }
-    public isProject(path: string): boolean {
-        return this.fs.existsSync(`${path}/project.json`);
+    public getProjectType(path: string): string {
+        if (this.fs.existsSync(`${path}/project.json`)) return "project";
+        if (this.fs.existsSync(`${path}/app/src/main/res/drawable-nodpi`) && this.fs.existsSync(`${path}/app/src/main/res/xml/`)) return "pack";
+        return "none";
     }
     /**
      * Opens a folder in the explorer
