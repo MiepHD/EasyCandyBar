@@ -49,7 +49,7 @@ export class XmlDataExtractor {
             const filepath: string = `${path}${file}.xml`,
                 xml: string = this.fs.readFileSync(filepath, "utf8");
             if ((!(files.includes("drawable"))) && file.includes("appfilter")) this.parseDrawable(this.commentAndObjectTogether(xml));
-            if (file == "drawable") {
+            if (file.includes("drawable")) {
                 this.parseDrawable(xml);
             } else {
                 this.xml2js.parseString(xml, (err: any, result: any) => {
