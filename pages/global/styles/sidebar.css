@@ -1,3 +1,6 @@
+body {
+    margin-left: calc(var(--sidebar-width) + 3ch) !important;
+}
 nav {
     display: grid;
     grid-template-columns: 1fr;
@@ -5,7 +8,7 @@ nav {
     position: fixed;
     height: 100%;
     width: auto;
-    background-color: darkgray;
+    background-color: var(--sidebar-color);
     left: calc(-1 * var(--distance));
 }
 nav[state=shown] {animation: showSidebar .5s cubic-bezier(0.5, -0.46, 0, 0.97) forwards;}
@@ -19,8 +22,8 @@ nav[state=hidden] {animation: hideSidebar .5s cubic-bezier(0, 0.97, 0.5, -0.46) 
 }
 nav div button {
     margin-left: auto;
-    width: 5ch;
-    height: 5ch;
+    width: var(--sidebar-width);
+    height: var(--sidebar-width);
     padding: 0;
     background-color: transparent;
     border-width: 0;
@@ -28,15 +31,18 @@ nav div button {
 }
 #navigation div,
 nav div:has(button) {
-    padding: 0.75ch 1.5ch;
-    height: 5ch;
+    padding: 0.75ch 1ch;
+    height: var(--sidebar-width);
     display: grid;
-    grid-template-columns: auto 5ch;
+    gap: 1ch;
+    grid-template-columns: auto var(--sidebar-width);
 }
 .title {
-    margin: auto 1ch;
+    margin: auto 0;
     height: min-content;
+    padding: 0 1ch;
 }
 .x {
     rotate: 45deg;
+    scale: 1.25;
 }

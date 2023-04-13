@@ -1,0 +1,16 @@
+:root {
+    /**
+     * General
+    **/
+    --background-color: rgb(70, 70, 70);
+    /**
+     * Sidebar settings
+    **/
+    --sidebar-width: 5ch;
+    --sidebar-color: darkgray;
+    /**
+     * Iconlist
+    **/
+    --iconlist-iconsize: 10ch;
+    --font-family: "Signika Negative";
+}

@@ -13,7 +13,7 @@ class SidebarLoader {
             const titleelement = $$("#pname");
             if (titleelement) titleelement.innerHTML = pname;
             this.sidebar = $$("nav");
-            $$("body")?.style.setProperty("--distance", `calc(${titleelement?.offsetWidth}px + 3ch)`);
+            $$("body")?.style.setProperty("--distance", `calc(${titleelement?.offsetWidth}px + 1.5ch)`);
             this.load();
         });
         ipcRenderer.send("GET", "./pages/global/sidebar.html");

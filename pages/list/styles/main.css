@@ -8,7 +8,11 @@ ul {
     width: 100%;
     padding-left: 0px;
 }
-#ch {
-    width: 1ch;
-    height: 1ch;
+#icon-size {
+    position: absolute;
+    width: var(--iconlist-iconsize);
+    height: var(--iconlist-iconsize);
+}
+#buttons {
+    padding: 1ch 1ch 2ch;
 }

@@ -13,7 +13,7 @@ class ListLoader {
      * @returns Number of icons that fit in a row
      */
 	private calcIconsPerLine(): number {
-		const minwidth = $$("#ch")?.offsetWidth * 10;
+		const minwidth = $$("#icon-size")?.offsetWidth;
 		return Math.floor($$("body")?.clientWidth / minwidth);
 	}
     /**
