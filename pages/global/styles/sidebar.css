@@ -46,3 +46,8 @@ nav div:has(button) {
     rotate: 45deg;
     scale: 1.25;
 }
+nav > div > button > img,
+#navigation > div > a > img {
+    width: 100%;
+    height: 100%;
+}
