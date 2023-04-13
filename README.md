@@ -1,4 +1,4 @@
-# Candybar
+# EasyCandybar
 EasyCandybar is an app to create Android icon-packs. It's mission is to allow everyone to create icon-packs easily through a GUI.
 
 It's build with node.js using electron and Typescript. For saving data json is used.
