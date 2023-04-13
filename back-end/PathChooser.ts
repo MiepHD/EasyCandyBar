@@ -19,7 +19,7 @@ export class PathChooser {
                 name: title,
                 extensions: [ext]
             }]
-        }).then((r: any) => { return r.filePaths[0]});
+        }).then((r: any) => { if (r.canceled) { return "canceled" } else { return r.filePaths[0] }});
     }
 
     /**

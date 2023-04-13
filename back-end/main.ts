@@ -6,10 +6,10 @@ import { DataConverter } from "./DataConverter";
 const { app, BrowserWindow, ipcMain } = require("electron"),
     fs: FileHandler = new FileHandler(),
     convert: DataConverter = new DataConverter();
-
+let win: typeof BrowserWindow;
 //Launches the app
 const createWindow = () => {
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false
@@ -50,6 +50,7 @@ ipcMain.on("openFolder", (e: any, type: string) => {
 
 ipcMain.on("importRequest", (e: any) => {
     new PathChooser().zip().then((path: string) => {
+        if (path.includes("canceled")) return;
         console.log("Loading zip to cache...");
         fs.newDir("cache/").then(() => {
             fs.copyFile(path, "cache/request.zip").then(() => {
@@ -122,6 +123,7 @@ ipcMain.on("setChangelog", (e: any, data: any) => {
 
 ipcMain.on("chooseImagePath", (e: any, id: string) => {
     new PathChooser().image().then((path: string) => {
+        if (path.includes("canceled")) return;
         console.log("Loading image to cache...");
         fs.newDir("pages/icon/cache/").then(() => {
             fs.copyFile(path, `pages/icon/cache/${id}.png`).then(() => {
@@ -148,6 +150,10 @@ ipcMain.on("GET", (e: any, path: string) => {
 function ensureProject(callback: Function): void {
     if (!(currentProject)) {
         new PathChooser().dir().then((path: string) => {
+            if (path.includes("canceled")) {
+                win.loadFile("pages/home/home.html");
+                return;
+            }
             const folders: Array<string> = path.split("\\");
             const id: string = folders[folders.length - 1];
             switch (fs.getProjectType(path)) {
