@@ -16,26 +16,31 @@
 </head>
 <body>
     <form action="../icon/saving.html">
-        <label for="type">State:</label>
-        <select name="type" required>
-            <option value="finished">Finished</option>
-            <option value="requested">Requested</option>
-        </select>
         <input type="checkbox" name="imagechanged">
         <input type="text" name="id" required>
-        <button id="chooser" type="button"><img src="" alt="Image of icon"></button>
-        <label for="title">Name:</label>
         <input type="text" name="title" pattern="[A-Za-z_ ][A-Za-z_ 0-9]+" required>
-        <label for="description">Description:</label>
-        <input type="text" name="description">
-        <label for="category">Category:</label>
-        <input type="text" name="category">
-        <label for="package">Package:</label>
-        <input type="text" name="package">
-        <label for="activity">Activity:</label>
-        <input type="text" name="activity">
-        <a id="cancel" href="">Cancel</a>
-        <input type="submit" value="Save">
+        <div>
+            <button id="chooser" type="button"><img src="" alt="Image of icon"></button>
+            <div id="details">
+                <label for="type">State:</label>
+                <select name="type" required>
+                    <option value="finished">Finished</option>
+                    <option value="requested">Requested</option>
+                </select>
+                <label for="description">Description:</label>
+                <input type="text" name="description">
+                <label for="category">Category:</label>
+                <input type="text" name="category">
+                <label for="package">Package:</label>
+                <input type="text" name="package">
+                <label for="activity">Activity:</label>
+                <input type="text" name="activity">
+            </div>
+        </div>
+        <div id="buttons">
+            <a id="cancel" href="">Cancel</a>
+            <input type="submit" value="Save">
+        </div>
     </form>
 </body>
 </html>
