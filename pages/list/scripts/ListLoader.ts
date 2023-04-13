@@ -1,9 +1,11 @@
 class ListLoader {
     private readonly params: URLSearchParams;
     private readonly ipcRenderer: any;
+    private rowlength: number;
     public constructor() {
         const { ipcRenderer } = require("electron");
         this.ipcRenderer = ipcRenderer;
+        this.rowlength = 0;
         this.params = new URLSearchParams(window.location.search);
         window.addEventListener('resize', this.setColumns.bind(this));
         this.loadProject();
@@ -20,7 +22,8 @@ class ListLoader {
      * Resizes the list
      */
     private setColumns(): void {
-        $$("ul").style.setProperty("--columns", this.calcIconsPerLine());
+        this.rowlength = this.calcIconsPerLine();
+        $$("ul").style.setProperty("--columns", this.rowlength);
     }
     /**
      * Adds an image for every icon
@@ -32,9 +35,26 @@ class ListLoader {
         const type: string | null = this.params.get("type") ? this.params.get("type") : "finished";
         $$("a").href = `../icon/icon.html?type=${type}`;
         this.ipcRenderer.on('Icons', (e: any, data: Array<string>) => {
-            for (const drawable of data) {
-                $("ul").append($(`<a href="../icon/icon.html?icon=${drawable}&type=${type}"><img src="../../projects/${id}/${type}/${drawable}.png"></a>`));
-            }
+            const list: JQuery<HTMLElement> = $("ul");
+            list.append($(`<div id="continuous"></div>`));
+            const observer: IntersectionObserver = new IntersectionObserver((entries: Array<IntersectionObserverEntry>) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        for (let i = 0; i < (this.rowlength * 5); i++) {
+                            const drawable: string = data[data.length - 1];
+                            $(`<a href="../icon/icon.html?icon=${drawable}&type=${type}"><img src="../../projects/${id}/${type}/${drawable}.png"></a>`).insertBefore($$("#continuous"));
+                            data.pop();
+                            if (data.length == 0) break;
+                        }
+                        if (data.length > 0) {
+                            $$("#continuous").remove();
+                            list.append($(`<div id="continuous"></div>`));
+                            observer.observe($$("#continuous"));
+                        }
+                    }
+                }
+            });
+            observer.observe($$("#continuous"));
         });
         this.ipcRenderer.send('getIcons', this.params.get("type"));
     }
