@@ -5,10 +5,9 @@ class SidebarLoader {
     private sidebar: HTMLElement | null;
     private shown: boolean;
     constructor(pname: string) {
-        const { ipcRenderer } = require("electron");
         this.sidebar = null;
         this.shown = false;
-        ipcRenderer.on("GETResponse", (e: any, content: string) => {
+        CommunicatorR.GET("./pages/global/sidebar.html", (content: string) => {
             $("body").prepend(content);
             const titleelement = $$("#pname");
             if (titleelement) titleelement.innerHTML = pname;
@@ -16,7 +15,6 @@ class SidebarLoader {
             $$("body")?.style.setProperty("--distance", `calc(${titleelement?.offsetWidth}px + 1.5ch)`);
             this.load();
         });
-        ipcRenderer.send("GET", "./pages/global/sidebar.html");
     }
     private load(): void {
         $$("#menu")?.addEventListener("click", this.toggle.bind(this));

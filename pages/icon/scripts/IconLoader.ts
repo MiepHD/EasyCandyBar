@@ -3,26 +3,19 @@
  */
 class IconLoader {
     private readonly params: URLSearchParams;
-    private readonly ipcRenderer: any;
     public constructor() {
-        const { ipcRenderer } = require("electron");
-        this.ipcRenderer = ipcRenderer;
         this.params = new URLSearchParams(window.location.search);
-
-        ipcRenderer.on("Icon", this.fillOut.bind(this));
-        ipcRenderer.on("savedImage", this.loadNewImageFromCache);
         $$("#chooser")?.addEventListener("click", this.chooseImage.bind(this));
         this.requestData();
     }
     /**
      * Fills the information of the received icon in the input fields
      */
-    private async fillOut(e: any, data: Icon): Promise<void> {
-        this.ipcRenderer.on("ProjectInfo", (e: any, data: ProjectStructure) => {
+    private fillOut(data: Icon): void {
+        CommunicatorR.getProjectInfo((data: ProjectStructure) => {
             new SidebarLoader(data.title);
             this.setImageSource(data);
         });
-        this.ipcRenderer.send("getProjectInfo");
         const typeselector = $$("select");
         if (typeselector) typeselector.value = new URLSearchParams(window.location.search).get("type") ? new URLSearchParams(window.location.search).get("type") : "finished";;
         $$("input[name=title]").value = data.title;
@@ -51,7 +44,7 @@ class IconLoader {
      */
     private chooseImage(): void {
         const id: string = $$("input[name=id]").value;
-        if (id&&id!="") { this.ipcRenderer.send("chooseImagePath", id); }
+        if (id&&id!="") { CommunicatorR.chooseImagePath(id, this.loadNewImageFromCache); }
         else {
             /**
              * To-do: Show this on page
@@ -64,7 +57,7 @@ class IconLoader {
      */
     private requestData(): void {
         if (this.params.get("icon")) {
-            this.ipcRenderer.send('getIcon', this.params.get("icon"));
+            CommunicatorR.getIcon(this.params.get("icon"), this.fillOut.bind(this));
             $$("input[name=id]").value = this.params.get("icon");
         } else {
             $$("input[name=title]").onchange = (e: any) => {

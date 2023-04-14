@@ -9,10 +9,13 @@ const { app, BrowserWindow, ipcMain } = require("electron"),
 let win: typeof BrowserWindow;
 //Launches the app
 const createWindow = () => {
+    const path: any = require("path");
     win = new BrowserWindow({
         webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false,
+			preload: path.join(__dirname, "./CommunicatorRenderer.js")
 		},
         width: 800,
         height: 600

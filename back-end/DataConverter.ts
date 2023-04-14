@@ -17,9 +17,11 @@ export class DataConverter {
             id: string = this.extractFolderName(path);
         
         console.log("Copying images...");
-        this.fs.copySync(`${path}/app/src/main/res/drawable-nodpi`, `projects/${id}/finished`);
+        this.fs.copy(`${path}/app/src/main/res/drawable-nodpi`, `projects/${id}/finished`, () => {
+            console.log("Copied images.");
+        });
 
-        console.log("Copied images.\nGenerating icon's properties...");
+        console.log("Generating icon's properties...");
         if (!this.fs.existsSync(`projects/${id}/properties/`)){ this.fs.mkdirSync(`projects/${id}/properties/`); }
         for (const key of Object.keys(data)) {
             this.fs.writeFileSync(`projects/${id}/properties/${key}.json`, JSON.stringify(data[key]));
