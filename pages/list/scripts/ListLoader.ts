@@ -63,7 +63,7 @@ class ListLoader {
         RendererAPI.getProjectInfo((info: ProjectStructure) => {
             $$("#open").addEventListener("click", () => { RendererAPI.openFolder(this.params.get("type")); });
             $$("#import").addEventListener("click", () => {
-                RendererAPI.importRequest(location.reload);
+                RendererAPI.importRequest(() => { location.reload(); });
             });
             new SidebarLoader(info.title);
             document.title = info.title;
