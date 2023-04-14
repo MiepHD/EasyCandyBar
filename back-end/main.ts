@@ -15,7 +15,7 @@ const createWindow = () => {
             nodeIntegration: false,
             contextIsolation: true,
             enableRemoteModule: false,
-			preload: path.join(__dirname, "./CommunicatorRenderer.js")
+			preload: path.join(__dirname, "./RendererAPIenderer.js")
 		},
         width: 800,
         height: 600

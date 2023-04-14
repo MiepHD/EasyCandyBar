@@ -31,7 +31,7 @@ class ListLoader {
         this.setColumns();
         const type: string | null = this.params.get("type") ? this.params.get("type") : "finished";
         $$("a").href = `../icon/icon.html?type=${type}`;
-        CommunicatorR.getIcons(this.params.get("type"), (data: Array<string>) => {
+        RendererAPI.getIcons(this.params.get("type"), (data: Array<string>) => {
             const list: JQuery<HTMLElement> = $("ul");
             list.append($(`<div id="continuous"></div>`));
             const observer: IntersectionObserver = new IntersectionObserver((entries: Array<IntersectionObserverEntry>) => {
@@ -60,10 +60,10 @@ class ListLoader {
      * Triggers addIcons
      */
     private loadProject(): void {
-        CommunicatorR.getProjectInfo((info: ProjectStructure) => {
-            $$("#open").addEventListener("click", () => { CommunicatorR.openFolder(this.params.get("type")); });
+        RendererAPI.getProjectInfo((info: ProjectStructure) => {
+            $$("#open").addEventListener("click", () => { RendererAPI.openFolder(this.params.get("type")); });
             $$("#import").addEventListener("click", () => {
-                CommunicatorR.importRequest(location.reload);
+                RendererAPI.importRequest(location.reload);
             });
             new SidebarLoader(info.title);
             document.title = info.title;

@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
-const CommunicatorR = {
+const RendererAPI = {
     openProject: (id?: string | null): void => {
         if (!id) return;
         ipcRenderer.send("openProject", id);
@@ -44,4 +44,4 @@ const CommunicatorR = {
         ipcRenderer.send("GET", path);
     }
 }
-contextBridge.exposeInMainWorld("CommunicatorR", CommunicatorR);
+contextBridge.exposeInMainWorld("RendererAPI", RendererAPI);

@@ -7,7 +7,7 @@ class SidebarLoader {
     constructor(pname: string) {
         this.sidebar = null;
         this.shown = false;
-        CommunicatorR.GET("./pages/global/sidebar.html", (content: string) => {
+        RendererAPI.GET("./pages/global/sidebar.html", (content: string) => {
             $("body").prepend(content);
             const titleelement = $$("#pname");
             if (titleelement) titleelement.innerHTML = pname;

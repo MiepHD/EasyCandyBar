@@ -12,7 +12,7 @@ class IconLoader {
      * Fills the information of the received icon in the input fields
      */
     private fillOut(data: Icon): void {
-        CommunicatorR.getProjectInfo((data: ProjectStructure) => {
+        RendererAPI.getProjectInfo((data: ProjectStructure) => {
             new SidebarLoader(data.title);
             this.setImageSource(data);
         });
@@ -44,7 +44,7 @@ class IconLoader {
      */
     private chooseImage(): void {
         const id: string = $$("input[name=id]").value;
-        if (id&&id!="") { CommunicatorR.chooseImagePath(id, this.loadNewImageFromCache); }
+        if (id&&id!="") { RendererAPI.chooseImagePath(id, this.loadNewImageFromCache); }
         else {
             /**
              * To-do: Show this on page
@@ -57,7 +57,7 @@ class IconLoader {
      */
     private requestData(): void {
         if (this.params.get("icon")) {
-            CommunicatorR.getIcon(this.params.get("icon"), this.fillOut.bind(this));
+            RendererAPI.getIcon(this.params.get("icon"), this.fillOut.bind(this));
             $$("input[name=id]").value = this.params.get("icon");
         } else {
             $$("input[name=title]").onchange = (e: any) => {
