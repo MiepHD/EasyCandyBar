@@ -41,11 +41,11 @@ ipcMain.on("openFolder", (e: any, type: string) => {
     ensureProject(() => {
         switch (type) {
             case "requested":
-                new FileHandler().openFolder(`projects/${currentProject.id}/requested`);
+                fs.openFolder(`projects/${currentProject.id}/requested`);
                 break;
             default:
             case "finished":
-                new FileHandler().openFolder(`projects/${currentProject.id}/finished`);
+                fs.openFolder(`projects/${currentProject.id}/finished`);
                 break;
         }
     });
@@ -146,7 +146,7 @@ ipcMain.on("getProjectInfo", (e: any) => {
 });
 
 ipcMain.on("GET", (e: any, path: string) => {
-    e.reply("GETResponse", new FileHandler().read(path));
+    e.reply("GETResponse", fs.read(path));
 })
 
 function ensureProject(callback: Function): void {

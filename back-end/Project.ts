@@ -9,10 +9,10 @@ import { ProjectFileHandler } from "./ProjectFileHandler";
  */
 export class Project {
     public readonly id: string;
+    public title: string;
     public readonly fs: ProjectFileHandler;
     private finished: Array<string>;
     private requested: Array<string>;
-    public title: string;
     public constructor(id: string) {
         this.id = id;
         this.fs = new ProjectFileHandler(id);
@@ -76,7 +76,7 @@ export class Project {
     public setChangelog(data: any): void {
 
     }
-    public saveIcon(id: string, data: FragmentedIcon) {
+    public saveIcon(id: string, data: FragmentedIcon): void {
         const icon: Icon = new Icon(data);
         this.fs.saveIconProperties(id, icon);
     }

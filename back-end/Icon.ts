@@ -2,11 +2,11 @@
  * Structure for an Icon
  */
 class Icon {
-    title: string;
-    description: string;
-    category: string;
-    package: string;
-    activity: string;
+    public title: string;
+    public description: string;
+    public category: string;
+    public package: string;
+    public activity: string;
     constructor(icon: FragmentedIcon) {
         this.title = icon.title ? icon.title : "Unknown";
         this.description = icon.description ? icon.description : "";

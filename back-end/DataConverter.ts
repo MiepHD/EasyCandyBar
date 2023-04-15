@@ -3,7 +3,7 @@ import { XmlDataExtractor } from "./XmlDataExtractor";
  * Converts a Candybar project or another icon-pack that has the same structure to an EasyCandyBar project
  */
 export class DataConverter {
-    fs: any;
+    private fs: any;
     public constructor() {
         this.fs = require("fs-extra");
     }
