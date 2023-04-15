@@ -47,4 +47,14 @@ interface Configuration {
     premium_request_email: string;
     regular_request_email_subject: string;
     premium_request_email_subject: string;
+    about_image: string;
+    about_profile_image: string;
+    about_title: string;
+    about_desc: string;
+    about_social_links: Array<string>;
+    show_contributors_dialog: boolean;
+    privacy_policy_link: string;
+    terms_and_conditions_link: string;
+    enable_donation: boolean;
+    show_intro: boolean;
 }

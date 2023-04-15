@@ -1,25 +1,14 @@
-export class FileHandler {
-    protected readonly fs: any;
+import { BaseFileHandler } from "./BaseFileHandler";
+
+export class FileHandler extends BaseFileHandler {
     private readonly path: any;
     private readonly child_process: any;
     private readonly StreamZip: any;
     constructor() {
-        this.fs = require("fs");
+        super();
         this.child_process = require("child_process");
         this.path = require("path");
         this.StreamZip = require("node-stream-zip");
-    }
-    public read(path: string): string {
-        return this.fs.readFileSync(path, { encoding: "utf8" });
-    }
-    public write(path: string, data: any): void {
-        this.fs.writeFileSync(path, JSON.stringify(data));
-    }
-    /**
-     * Creates a new directory if it doesn't already exist
-     */
-    public async newDir(path: string): Promise<void> {
-        if (!this.fs.existsSync(path)) await this.fs.mkdirSync(path);
     }
     public async deleteDir(path: string): Promise<void> {
         if (!this.fs.existsSync(path)) await this.fs.rmSync(path, { recursive: true, force: true });

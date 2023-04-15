@@ -1,9 +1,9 @@
-import { FileHandler } from "./FileHandler";
+import { BaseFileHandler } from "./BaseFileHandler";
 
 /**
  * Handles the files associated with this project
  */
-export class ProjectFileHandler extends FileHandler {
+export class ProjectFileHandler extends BaseFileHandler {
     /**
      * Id of the project it is associated with
      */
@@ -30,11 +30,12 @@ export class ProjectFileHandler extends FileHandler {
      */
     public moveImage (id: string, type: string): void {
         if (!(this.fs.existsSync(`projects/${this.project}/${type}/${id}.png`))) {
-            if (!(this.fs.existsSync(`projects/${this.project}/${type}`))) this.fs.mkdirSync(`projects/${this.project}/${type}`);
-            this.fs.copyFileSync(`projects/${this.project}/${this.switchType(type)}/${id}.png`, `projects/${this.project}/${type}/${id}.png`);
-            this.fs.unlink(`projects/${this.project}/${this.switchType(type)}/${id}.png`, (err: Error | undefined) => {
-                if (err) throw err;
-                console.log("Successfully moved file");
+            this.newDir(`projects/${this.project}/${type}`).then(() => {
+                this.fs.copyFileSync(`projects/${this.project}/${this.switchType(type)}/${id}.png`, `projects/${this.project}/${type}/${id}.png`);
+                this.fs.unlink(`projects/${this.project}/${this.switchType(type)}/${id}.png`, (err: Error | undefined) => {
+                    if (err) throw err;
+                    console.log("Successfully moved file");
+                });
             });
         }
     }
