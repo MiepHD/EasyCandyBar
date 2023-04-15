@@ -15,7 +15,7 @@ const createWindow = () => {
             nodeIntegration: false,
             contextIsolation: true,
             enableRemoteModule: false,
-			preload: path.join(__dirname, "./RendererAPIenderer.js")
+			preload: path.join(__dirname, "./RendererAPI.js")
 		},
         width: 800,
         height: 600
@@ -60,7 +60,6 @@ ipcMain.on("importRequest", (e: any) => {
                 console.log("Loaded zip to cache.");
                 fs.extractZip("cache/request.zip").then(() => {
                     convert.request("cache/extracted/", currentProject.id).then((data: any) => {
-                        console.log(data);
                         for (const icon of Object.getOwnPropertyNames(data)) {
                             currentProject.setIconCategory(icon, "requested");
                             currentProject.fs.saveIconProperties(icon, data[icon]);
