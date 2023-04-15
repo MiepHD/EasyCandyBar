@@ -6,6 +6,7 @@ class IconLoader {
     public constructor() {
         this.params = new URLSearchParams(window.location.search);
         $$("#chooser")?.addEventListener("click", this.chooseImage.bind(this));
+        window.addEventListener('resize', () => { $$("#chooser > img").style.height = `${$$("#details").offsetHeight}px`; });
         this.requestData();
     }
     /**
@@ -37,6 +38,7 @@ class IconLoader {
      * @param data ProjectData (only the id is needed)
      */
     private setImageSource(data: ProjectStructure): void {
+        $$("#chooser > img").style.height = `${$$("#details").offsetHeight}px`;
         $$("#chooser > img").src = `../../projects/${data.id}/${$$("select").value}/${$$("input[name=id]").value}.png`;
     }
     /**

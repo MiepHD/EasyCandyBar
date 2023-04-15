@@ -3,6 +3,7 @@ input[name=id],
 input[name=imagechanged] { display: none; }
 html, body {
     height: 100%;
+    overflow-x: hidden;
 }
 #cancel,
 select,
@@ -21,13 +22,15 @@ select > option {
     color: black;
 }
 form {
+    position: relative;
     display: grid;
     height: 100%;
-    grid-template-columns: 1fr max-content;
-    grid-template-rows: auto max-content 1fr;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 3ch;
 }
 input[name=title] {
-    font-size: 10ch;
+    font-size: 5ch;
     margin: 0.5ch auto 1ch;
     width: fit-content;
     height: 2.25ch;
@@ -35,22 +38,21 @@ input[name=title] {
     grid-row: 1 / 2;
 }
 #chooser {
+    position: relative;
     height: auto;
-    max-height: 90vh;
     width: fit-content;
     grid-column: 1 / 2;
     grid-row: 2 / 3;
 }
-form > div {
-    display: grid;
-    grid-template-columns: auto 1fr;
+#chooser > img {
+    height: 100%;
+    width: 100%;
 }
-form > div > div {
-    margin-left: 3ch;
+#details {
     color: var(--accent-color);
     display: grid;
-    height: fit-content;
-    width: -webkit-fill-available;
+    height: min-content;
+    width: 100%;
     font-size: 2ch;
     grid-column: 2 / 3;
     grid-row: 2 / 3;
@@ -58,14 +60,6 @@ form > div > div {
 /**
  * Buttons
 **/
-#buttons {
-    position: fixed;
-    display: flex;
-    pointer-events: none;
-    height: 100%;
-    width: calc(100% - var(--sidebar-width) - 4ch);
-    align-items: flex-end;
-}
 #cancel {
     width: fit-content;
     pointer-events: all;
@@ -78,4 +72,5 @@ input[type=submit] {
     width: fit-content;
     grid-column: 2 / 3;
     grid-row: 4 / 5;
+    cursor: pointer;
 }

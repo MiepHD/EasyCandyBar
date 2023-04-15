@@ -17,8 +17,10 @@ const createWindow = () => {
             enableRemoteModule: false,
 			preload: path.join(__dirname, "./RendererAPI.js")
 		},
-        width: 800,
-        height: 600
+        width: 1280,
+        height: 720,
+        minWidth: 600,
+        minHeight: 600
     });
     win.loadFile("pages/home/home.html");
 }
