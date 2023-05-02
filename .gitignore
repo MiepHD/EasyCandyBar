@@ -1,5 +1,6 @@
 node_modules/
 projects/
 *.js
+!jquery.js
 cache/
 pages/icon/cache/
