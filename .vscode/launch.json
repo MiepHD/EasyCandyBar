@@ -6,7 +6,7 @@
         "request": "launch",
         "name": "Debug Main Process",
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-        "program": "${workspaceRoot}/index.js",
+        "program": "${workspaceRoot}/main.js",
         "runtimeArgs": [
           ".",
           // this args for attaching render process

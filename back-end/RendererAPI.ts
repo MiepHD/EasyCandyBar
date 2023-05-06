@@ -1,5 +1,8 @@
 const { contextBridge, ipcRenderer } = require("electron");
 const RendererAPI = {
+    addImagesListener: (callback: Functions["void"]): void => {
+        ipcRenderer.on("ImagesLoaded", callback);
+    },
     /**
      * Opens a project by id
      * @param id Project's id

@@ -1,13 +1,15 @@
 export class BaseFileHandler {
     protected readonly fs: any;
+    private readonly extra: any
     constructor() {
         this.fs = require("fs");
+        this.extra = require("fs-extra");
     }
     /**
      * Creates a new directory if it doesn't already exist
      */
     public async newDir(path: string): Promise<void> {
-        if (!this.fs.existsSync(path)) await this.fs.mkdirSync(path);
+        if (!this.extra.existsSync(path)) await this.extra.mkdirSync(path);
     }
     public read(path: string): string {
         return this.fs.readFileSync(path, { encoding: "utf8" });

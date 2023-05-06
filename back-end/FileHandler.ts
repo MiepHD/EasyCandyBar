@@ -33,4 +33,13 @@ export class FileHandler extends BaseFileHandler {
     public async copyFile(origin: string, dest: string): Promise<void> {
         await this.fs.copyFileSync(origin, dest);
     }
+    /**
+     * Extracts folder from path to folder
+     * @param path Path to a folder
+     * @returns Folder
+     */
+    public extractFolderName(path: string): string {
+        const folders: Array<string> = path.split("\/").length > 1 ? path.split("\/") : path.split("\\");
+        return folders[folders.length - 1];
+    }
 }

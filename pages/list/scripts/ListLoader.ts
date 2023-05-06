@@ -5,6 +5,7 @@ class ListLoader {
         this.rowlength = 0;
         this.params = new URLSearchParams(window.location.search);
         window.addEventListener('resize', this.setColumns.bind(this));
+        RendererAPI.addImagesListener(() => {location.reload()});
         this.loadProject();
     }
     /**

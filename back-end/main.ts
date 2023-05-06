@@ -40,7 +40,7 @@ ipcMain.on("openProject", (e: any, id: string) => {
 });
 
 ipcMain.on("openFolder", (e: any, type: string) => {
-    ensureProject(() => {
+    ensureProject(e, () => {
         switch (type) {
             case "requested":
                 fs.openFolder(`projects/${currentProject.id}/requested`);
@@ -76,7 +76,7 @@ ipcMain.on("importRequest", (e: any) => {
 });
 
 ipcMain.on("getIcons", (e: any, type: string) => {
-    ensureProject(() => {
+    ensureProject(e, () => {
         switch (type) {
             case "requested":
                 e.reply("Icons", currentProject.getRequestedIcons());
@@ -139,7 +139,7 @@ ipcMain.on("chooseImagePath", (e: any, id: string) => {
 });
 
 ipcMain.on("getProjectInfo", (e: any) => {
-    ensureProject(() => {
+    ensureProject(e, () => {
         e.reply("ProjectInfo", {
             "id": currentProject.id,
             "title": currentProject.title
@@ -151,24 +151,22 @@ ipcMain.on("GET", (e: any, path: string) => {
     e.reply("GETResponse", fs.read(path));
 })
 
-function ensureProject(callback: Function): void {
+function ensureProject(e: any, callback: Function): void {
     if (!(currentProject)) {
         new PathChooser().dir().then((path: string) => {
             if (path.includes("canceled")) {
                 win.loadFile("pages/home/home.html");
                 return;
             }
-            const folders: Array<string> = path.split("\\");
-            const id: string = folders[folders.length - 1];
             switch (fs.getProjectType(path)) {
                 default:
                 case "none":
-                    ensureProject(callback);
+                    ensureProject(e, callback);
                     break;
                 case "pack":
-                    convert.project(path);
+                    convert.project(path, () => {e.reply("ImagesLoaded")});
                 case "project":
-                    currentProject = new Project(id);
+                    currentProject = new Project(fs.extractFolderName(path));
                     callback();
             }
         });
