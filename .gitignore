@@ -4,3 +4,4 @@ projects/
 !jquery.js
 cache/
 pages/icon/cache/
+*.js.map
