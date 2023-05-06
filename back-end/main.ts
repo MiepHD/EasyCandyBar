@@ -99,7 +99,7 @@ ipcMain.on("getIcon", (e: any, id: string) => {
 ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, type: string) => {
 	if (imagechanged) {
 		console.log("Copying new file...");
-		fs.copyFile(`pages/icon/cache/${id}.png`, `projects/${currentProject.id}/${type}/${id}.png`).then(() => {
+		fs.copyFile(`pages/icon/cache/icon.png`, `projects/${currentProject.id}/${type}/${id}.png`).then(() => {
 			console.log("Copied new file.\nClearing cache...");
 			fs.deleteDir("pages/icon/cache/").then(() => {
 				console.log("Cleared cache.");
@@ -122,12 +122,12 @@ ipcMain.on("getChangelog", (e: any) => {});
 
 ipcMain.on("setChangelog", (e: any, data: any) => {});
 
-ipcMain.on("chooseImagePath", (e: any, id: string) => {
+ipcMain.on("chooseImagePath", (e: any) => {
 	new PathChooser().image().then((path: string) => {
 		if (path.includes("canceled")) return;
 		console.log("Loading image to cache...");
 		fs.newDir("pages/icon/cache/").then(() => {
-			fs.copyFile(path, `pages/icon/cache/${id}.png`).then(() => {
+			fs.copyFile(path, `pages/icon/cache/icon.png`).then(() => {
 				console.log("Loaded image to cache.");
 				e.reply("savedImage");
 			});

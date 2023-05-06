@@ -36,7 +36,7 @@ class IconLoader {
 	 * Loads the image from chooseImage() after it is successfully copied
 	 */
 	private async loadNewImageFromCache(): Promise<void> {
-		$$("#chooser > img").src = `cache/${$$("input[name=id]").value}.png`;
+		$$("#chooser > img").src = `cache/icon.png`;
 		$$("input[name=imagechanged]").checked = true;
 	}
 	/**
