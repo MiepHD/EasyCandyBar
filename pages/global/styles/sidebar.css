@@ -1,54 +1,64 @@
 body {
-    margin-left: calc(var(--sidebar-width) + 3ch) !important;
+	margin-left: calc(var(--sidebar-width) + 3ch) !important;
 }
 nav {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    position: fixed;
-    height: 100%;
-    width: auto;
-    background-color: var(--sidebar-color);
-    left: calc(-1 * var(--distance));
-    z-index: 1;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto 1fr;
+	position: fixed;
+	height: 100%;
+	width: auto;
+	background-color: var(--sidebar-color);
+	left: calc(-1 * var(--distance));
+	z-index: 1;
 }
-nav[state=shown] {animation: showSidebar .5s cubic-bezier(0.5, -0.46, 0, 0.97) forwards;}
-nav[state=hidden] {animation: hideSidebar .5s cubic-bezier(0, 0.97, 0.5, -0.46) forwards;}
+nav[state="shown"] {
+	animation: showSidebar 0.5s cubic-bezier(0.5, -0.46, 0, 0.97) forwards;
+}
+nav[state="hidden"] {
+	animation: hideSidebar 0.5s cubic-bezier(0, 0.97, 0.5, -0.46) forwards;
+}
 @keyframes showSidebar {
-    100% { translate: var(--distance) 0 }
+	100% {
+		translate: var(--distance) 0;
+	}
 }
 @keyframes hideSidebar {
-    0% { translate: var(--distance) 0 }
-    100% { translate: 0 0 }
+	0% {
+		translate: var(--distance) 0;
+	}
+	100% {
+		translate: 0 0;
+	}
 }
 nav div button {
-    margin-left: auto;
-    width: var(--sidebar-width);
-    height: var(--sidebar-width);
-    padding: 0;
-    background-color: transparent;
-    border-width: 0;
-    cursor: pointer;
+	margin-left: auto;
+	width: var(--sidebar-width);
+	height: var(--sidebar-width);
+	padding: 0;
+	background-color: transparent;
+	border-width: 0;
+	cursor: pointer;
 }
 #navigation div,
 nav div:has(button) {
-    padding: 0.75ch 1ch;
-    height: var(--sidebar-width);
-    display: grid;
-    gap: 1ch;
-    grid-template-columns: auto var(--sidebar-width);
+	padding: 0.75ch 1ch;
+	height: var(--sidebar-width);
+	display: grid;
+	gap: 1ch;
+	grid-template-columns: auto var(--sidebar-width);
 }
 .title {
-    margin: auto 0;
-    height: min-content;
-    padding: 0 1ch;
+	margin: auto 0;
+	height: min-content;
+	padding: 0 1ch;
 }
 .x {
-    rotate: 45deg;
-    scale: 1.25;
+	rotate: 45deg;
+	scale: 1.25;
 }
 nav > div > button > img,
 #navigation > div > a > img {
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 }

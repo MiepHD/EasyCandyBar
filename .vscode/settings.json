@@ -1,8 +1,7 @@
 {
-    "testr.enable": true,
-    "testr.autoTest": 1700,
-    "testr.successExitCodes": [
-        0
-    ],
-    "testr.runWith": "terminal"
+	"testr.enable": true,
+	"testr.autoTest": 1700,
+	"testr.successExitCodes": [0],
+	"testr.runWith": "terminal",
+	"editor.defaultFormatter": "esbenp.prettier-vscode"
 }

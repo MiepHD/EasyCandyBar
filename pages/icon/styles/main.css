@@ -1,76 +1,79 @@
-input[name=imagepath],
-input[name=id],
-input[name=imagechanged] { display: none; }
-html, body {
-    height: 100%;
-    overflow-x: hidden;
+input[name="imagepath"],
+input[name="id"],
+input[name="imagechanged"] {
+	display: none;
+}
+html,
+body {
+	height: 100%;
+	overflow-x: hidden;
 }
 #cancel,
 select,
 input {
-    font-size: 3ch;
-    color: lightgray;
-    background-color: transparent;
-    border-width: 0 0 0.15ch 0;
-    border-color: var(--accent-color);
+	font-size: 3ch;
+	color: lightgray;
+	background-color: transparent;
+	border-width: 0 0 0.15ch 0;
+	border-color: var(--accent-color);
 }
 #details select,
 #details input {
-    width: 100%;
+	width: 100%;
 }
 select > option {
-    color: black;
+	color: black;
 }
 form {
-    position: relative;
-    display: grid;
-    height: 100%;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto 1fr auto;
-    gap: 3ch;
+	position: relative;
+	display: grid;
+	height: 100%;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto auto 1fr auto;
+	gap: 3ch;
 }
-input[name=title] {
-    font-size: 5ch;
-    margin: 0.5ch auto 1ch;
-    width: fit-content;
-    height: 2.25ch;
-    grid-column: 1 / 3;
-    grid-row: 1 / 2;
+input[name="title"] {
+	font-size: 5ch;
+	margin: 0.5ch auto 1ch;
+	width: fit-content;
+	height: 2.25ch;
+	grid-column: 1 / 3;
+	grid-row: 1 / 2;
 }
 #chooser {
-    position: relative;
-    height: auto;
-    width: fit-content;
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
+	position: relative;
+	height: auto;
+	width: fit-content;
+	grid-column: 1 / 2;
+	grid-row: 2 / 3;
 }
 #chooser > img {
-    height: 100%;
-    width: 100%;
+	height: 100%;
+	width: 100%;
 }
 #details {
-    color: var(--accent-color);
-    display: grid;
-    height: min-content;
-    width: 100%;
-    font-size: 2ch;
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
+	color: var(--accent-color);
+	display: grid;
+	height: min-content;
+	width: 100%;
+	font-size: 2ch;
+	grid-column: 2 / 3;
+	grid-row: 2 / 3;
 }
 /**
  * Buttons
 **/
 #cancel {
-    width: fit-content;
-    pointer-events: all;
-    grid-column: 1 / 2;
-    grid-row: 4 / 5;
+	width: fit-content;
+	pointer-events: all;
+	grid-column: 1 / 2;
+	grid-row: 4 / 5;
 }
-input[type=submit] {
-    margin-left: auto;
-    pointer-events: all;
-    width: fit-content;
-    grid-column: 2 / 3;
-    grid-row: 4 / 5;
-    cursor: pointer;
+input[type="submit"] {
+	margin-left: auto;
+	pointer-events: all;
+	width: fit-content;
+	grid-column: 2 / 3;
+	grid-row: 4 / 5;
+	cursor: pointer;
 }

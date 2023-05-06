@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../global/scripts/utils.js"></script>
-    <script src="../global/lib/jquery.js"></script>
-    <script src="../global/scripts/SidebarLoader.js"></script>
-    <script src="./scripts/IconLoader.js"></script>
-    <link rel="stylesheet" type="text/css" href="../global/styles/vars.css">
-    <link rel="stylesheet" type="text/css" href="../global/styles/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="../global/styles/main.css">
-    <link rel="stylesheet" type="text/css" href="./styles/main.css">
-    <title>Icon</title>
-</head>
-<body>
-    <form action="../icon/saving.html">
-        <input type="checkbox" name="imagechanged">
-        <input type="text" name="id" required>
-        <input type="text" name="title" pattern="[A-Za-z_ ][A-Za-z_ 0-9]+" required>
-        <button id="chooser" type="button"><img src="" alt="Image of icon"></button>
-        <div id="details">
-            <label for="type">State:</label>
-            <select name="type" required>
-                <option value="finished">Finished</option>
-                <option value="requested">Requested</option>
-            </select>
-            <label for="description">Description:</label>
-            <input type="text" name="description">
-            <label for="category">Category:</label>
-            <input type="text" name="category">
-            <label for="package">Package:</label>
-            <input type="text" name="package">
-            <label for="activity">Activity:</label>
-            <input type="text" name="activity">
-        </div>
-        <a id="cancel" href="">Cancel</a>
-        <input type="submit" value="Save">
-    </form>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="../global/scripts/utils.js"></script>
+		<script src="../global/lib/jquery.js"></script>
+		<script src="../global/scripts/SidebarLoader.js"></script>
+		<script src="./scripts/IconLoader.js"></script>
+		<link rel="stylesheet" type="text/css" href="../global/styles/vars.css" />
+		<link rel="stylesheet" type="text/css" href="../global/styles/sidebar.css" />
+		<link rel="stylesheet" type="text/css" href="../global/styles/main.css" />
+		<link rel="stylesheet" type="text/css" href="./styles/main.css" />
+		<title>Icon</title>
+	</head>
+	<body>
+		<form action="../icon/saving.html">
+			<input type="checkbox" name="imagechanged" />
+			<input type="text" name="id" required />
+			<input type="text" name="title" pattern="[A-Za-z_ ][A-Za-z_ 0-9]+" required />
+			<button id="chooser" type="button"><img src="" alt="Image of icon" /></button>
+			<div id="details">
+				<label for="type">State:</label>
+				<select name="type" required>
+					<option value="finished">Finished</option>
+					<option value="requested">Requested</option>
+				</select>
+				<label for="description">Description:</label>
+				<input type="text" name="description" />
+				<label for="category">Category:</label>
+				<input type="text" name="category" />
+				<label for="package">Package:</label>
+				<input type="text" name="package" />
+				<label for="activity">Activity:</label>
+				<input type="text" name="activity" />
+			</div>
+			<a id="cancel" href="">Cancel</a>
+			<input type="submit" value="Save" />
+		</form>
+	</body>
 </html>

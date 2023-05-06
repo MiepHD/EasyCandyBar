@@ -4,8 +4,8 @@
  * @returns NodeListOf<Element> | undefined | Element
  */
 function $n(query: string): any {
-    return document.querySelectorAll(query);
+	return document.querySelectorAll(query);
 }
 function $$(query: string): any {
-    return document.querySelector(query);
+	return document.querySelector(query);
 }
