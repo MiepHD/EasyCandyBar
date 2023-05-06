@@ -104,9 +104,11 @@ ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, typ
 			fs.deleteDir("pages/icon/cache/").then(() => {
 				console.log("Cleared cache.");
 			});
+			currentProject.setIconCategory(id, type);
 		});
+	} else {
+		currentProject.setIconCategory(id, type);
 	}
-	currentProject.setIconCategory(id, type);
 	currentProject.fs.saveIconProperties(id, icon);
 	console.log("Icon saved successfully.");
 	e.reply("savedIcon");
