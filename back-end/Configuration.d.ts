@@ -13,8 +13,10 @@ interface Configuration {
 	 * "card_landscape"
 	 * "landscape"
 	 * "square"
+	 * Has to be converted to home_image_style
 	 */
-	home_image_style: string;
+	home_image_type: boolean;
+	home_image_orientation: boolean;
 	home_description: string;
 	enable_check_update: boolean;
 	/**
