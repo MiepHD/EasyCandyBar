@@ -3,15 +3,9 @@
 		"name": "Theme",
 		"type": "radio",
 		"options": {
-			"auto": {
-				"name": "Automatic"
-			},
-			"light": {
-				"name": "Light"
-			},
-			"dark": {
-				"name": "Dark"
-			}
+			"auto": { "name": "Automatic" },
+			"light": { "name": "Light" },
+			"dark": { "name": "Dark" }
 		}
 	},
 	"description": {
@@ -22,72 +16,201 @@
 		"name": "Base Color",
 		"type": "color"
 	},
-	"home_image_type": {
-		"name": "Home Image Style: Type",
-		"type": "radio",
-		"options": {
-			"card": {
-				"name": "Card"
-			},
-			"default": {
-				"name": "Default"
+	"home_image_style": {
+		"name": "Home Image Style",
+		"type": "fieldset",
+		"toggle": false,
+		"home_image_type": {
+			"name": "Type",
+			"type": "radio",
+			"options": {
+				"card": { "name": "Card" },
+				"default": { "name": "Default" }
+			}
+		},
+		"home_image_orientation": {
+			"name": "Orientation",
+			"type": "radio",
+			"options": {
+				"landscape": { "name": "Landscape" },
+				"square": { "name": "Square" }
 			}
 		}
 	},
-	"home_image_orientation": {
-		"name": "Home Image Style: Orientation",
-		"type": "radio",
-		"options": {
-			"landscape": {
-				"name": "Landscape"
-			},
-			"square": {
-				"name": "Square"
-			}
+	"homepage": {
+		"name": "Homepage",
+		"type": "fieldset",
+		"toggle": false,
+		"home_description": {
+			"name": "Description",
+			"type": "text"
+		},
+		"use_flat_card": {
+			"name": "Flat Card",
+			"type": "checkbox"
+		},
+		"enable_check_update": {
+			"name": "Check Update",
+			"type": "checkbox"
+		},
+		"google_play_dev": {
+			"name": "More Apps from developer (Insert developer url)",
+			"type": "text"
+		},
+		"enable_apply": {
+			"name": "Apply Button",
+			"type": "checkbox"
+		},
+		"hide_missing_app_count": {
+			"name": "Missing apps count",
+			"type": "checkbox"
+		},
+		"enable_donation": {
+			"name": "Donations",
+			"type": "checkbox"
+		},
+		"show_intro": {
+			"name": "Intro",
+			"type": "checkbox"
+		},
+		"show_contributors_dialog": {
+			"name": "Contributors dialog",
+			"type": "checkbox"
 		}
 	},
-	"home_description": {
-		"name": "Home Description",
+	"navigation_view_header_title": {
+		"name": "Navigation View Header Title",
 		"type": "text"
 	},
-	"enable_check_update": {
-		"name": "Check Update",
+	"icons_list": {
+		"name": "Icons list",
+		"type": "fieldset",
+		"toggle": false,
+		"enable_icons_sort": {
+			"name": "Sort icons",
+			"type": "checkbox"
+		},
+		"show_icon_name": {
+			"name": "Show icon names",
+			"type": "checkbox"
+		}
+	},
+	"includes_adaptive_icons": {
+		"name": "Adaptive icons",
 		"type": "checkbox"
 	},
-	"google_play_dev": {
-		"name": "Google Play Dev Link",
-		"type": "text"
+	"requests": {
+		"name": "Requests",
+		"type": "fieldset",
+		"toggle": true,
+		"regular_icon_requests": {
+			"name": "Regular requests",
+			"type": "fieldset",
+			"toggle": false,
+			"regular_request_method": {
+				"name": "Method",
+				"type": {
+					"type": "radio",
+					"options": {
+						"email": { "name": "E-Mail" },
+						"pacific": { "name": "Pacific" }
+					}
+				},
+				"email": {
+					"name": "E-Mail",
+					"type": "fieldset",
+					"toggle": "type:email",
+					"address": {
+						"name": "Address",
+						"type": "text"
+					},
+					"subject": {
+						"name": "Subject",
+						"type": "text"
+					}
+				}
+			},
+			"icon_request_limit": {
+				"name": "Limit",
+				"type": "fieldset",
+				"toggle": true,
+				"icon_request_limit": { "type": "number" },
+				"reset_icon_request_limit": {
+					"name": "Reset icon request limit on update",
+					"type": "checkbox"
+				}
+			}
+		},
+		"premium_request": {
+			"name": "Premium requests",
+			"type": "fieldset",
+			"toggle": true,
+			"enable_premium_request": { "type": "checkbox" },
+			"premium_request_method": {
+				"name": "Method",
+				"type": {
+					"type": "radio",
+					"options": {
+						"email": { "name": "E-Mail" },
+						"pacific": { "name": "Pacific" }
+					}
+				},
+				"email": {
+					"name": "E-Mail",
+					"type": "fieldset",
+					"toggle": "type:email",
+					"address": {
+						"name": "Address",
+						"type": "text"
+					},
+					"subject": {
+						"name": "Subject",
+						"type": "text"
+					}
+				}
+			}
+		},
+		"enable_non_mail_app_request": {
+			"name": "Non-Mail requests",
+			"type": "checkbox"
+		}
 	},
-	"use_flat_card": "boolean",
-	"navigation_view_header_title": "string",
-	"enable_apply": "boolean",
-	"enable_icons_sort": "boolean",
-	"show_icon_name": "boolean",
-	"includes_adaptive_icons": "boolean",
-	"enable_icon_request": "boolean",
-	"enable_icon_request_limit": "boolean",
-	"icon_request_limit": "number",
-	"reset_icon_request_limit": "boolean",
-	"json_check_before_request": "boolean",
-	"enable_premium_request": "boolean",
-	"enable_non_mail_app_request": "boolean",
-	"hide_missing_app_count": "boolean",
-
-	"regular_request_method": "string",
-
-	"premium_request_method": "string",
-	"regular_request_email": "string",
-	"premium_request_email": "string",
-	"regular_request_email_subject": "string",
-	"premium_request_email_subject": "string",
-	"about_image": "string",
-	"about_profile_image": "string",
-	"about_title": "string",
-	"about_desc": "string",
-	"about_social_links": "Array<string>",
-	"show_contributors_dialog": "boolean",
-	"privacy_policy_link": "string",
-	"terms_and_conditions_link": "string",
-	"enable_donation": "boolean",
-	"show_intro": "boolean"
+	"about": {
+		"name": "About",
+		"type": "fieldset",
+		"toggle": false,
+		"about_image": {
+			"name": "Image",
+			"type": "image-selector"
+		},
+		"about_profile_image": {
+			"name": "Profile image",
+			"type": "image-selector"
+		},
+		"about_title": {
+			"name": "Title",
+			"type": "text"
+		},
+		"about_desc": {
+			"name": "Description",
+			"type": "text"
+		},
+		"about_social_links": {
+			"name": "Social Links",
+			"type": "textarea"
+		}
+	},
+	"links": {
+		"name": "Links",
+		"type": "fieldset",
+		"toggle": false,
+		"privacy_policy_link": {
+			"name": "Privacy policy",
+			"type": "text"
+		},
+		"terms_and_conditions_link": {
+			"name": "Terms and conditions",
+			"type": "text"
+		}
+	}
 }
