@@ -1,4 +1,20 @@
 {
+	"navigation_view_header_title": {
+		"name": "Navigation View Header Title",
+		"type": "text"
+	},
+	"includes_adaptive_icons": {
+		"name": "Adaptive icons",
+		"type": "checkbox"
+	},
+	"show_intro": {
+		"name": "Intro",
+		"type": "checkbox"
+	},
+	"show_contributors_dialog": {
+		"name": "Contributors dialog",
+		"type": "checkbox"
+	},
 	"default_theme": {
 		"name": "Theme",
 		"type": "radio",
@@ -68,19 +84,7 @@
 		"enable_donation": {
 			"name": "Donations",
 			"type": "checkbox"
-		},
-		"show_intro": {
-			"name": "Intro",
-			"type": "checkbox"
-		},
-		"show_contributors_dialog": {
-			"name": "Contributors dialog",
-			"type": "checkbox"
 		}
-	},
-	"navigation_view_header_title": {
-		"name": "Navigation View Header Title",
-		"type": "text"
 	},
 	"icons_list": {
 		"name": "Icons list",
@@ -95,28 +99,30 @@
 			"type": "checkbox"
 		}
 	},
-	"includes_adaptive_icons": {
-		"name": "Adaptive icons",
-		"type": "checkbox"
-	},
 	"requests": {
 		"name": "Requests",
 		"type": "fieldset",
 		"toggle": true,
+		"enable_non_mail_app_request": {
+			"name": "Non-Mail requests",
+			"type": "checkbox"
+		},
 		"regular_icon_requests": {
 			"name": "Regular requests",
 			"type": "fieldset",
 			"toggle": false,
 			"regular_request_method": {
 				"name": "Method",
-				"type": {
+				"type": "fieldset",
+				"regular_email_type": {
+					"name": "Type",
 					"type": "radio",
 					"options": {
 						"email": { "name": "E-Mail" },
 						"pacific": { "name": "Pacific" }
 					}
 				},
-				"email": {
+				"regular_request_email": {
 					"name": "E-Mail",
 					"type": "fieldset",
 					"toggle": "type:email",
@@ -134,7 +140,10 @@
 				"name": "Limit",
 				"type": "fieldset",
 				"toggle": true,
-				"icon_request_limit": { "type": "number" },
+				"icon_request_limit": {
+					"name": "Max",
+					"type": "number"
+				},
 				"reset_icon_request_limit": {
 					"name": "Reset icon request limit on update",
 					"type": "checkbox"
@@ -145,17 +154,18 @@
 			"name": "Premium requests",
 			"type": "fieldset",
 			"toggle": true,
-			"enable_premium_request": { "type": "checkbox" },
 			"premium_request_method": {
 				"name": "Method",
-				"type": {
+				"type": "fieldset",
+				"premium_email_type": {
+					"name": "Type",
 					"type": "radio",
 					"options": {
 						"email": { "name": "E-Mail" },
 						"pacific": { "name": "Pacific" }
 					}
 				},
-				"email": {
+				"premium_request_email": {
 					"name": "E-Mail",
 					"type": "fieldset",
 					"toggle": "type:email",
@@ -169,10 +179,6 @@
 					}
 				}
 			}
-		},
-		"enable_non_mail_app_request": {
-			"name": "Non-Mail requests",
-			"type": "checkbox"
 		}
 	},
 	"about": {

@@ -56,8 +56,7 @@ interface RendererAPIStructure {
 	/**
 	 * Loads a file
 	 *
-	 * Note: Path's origin is /back-end/
-	 * @param path Absolute path or relative path from /back-end/
+	 * @param path Absolute path or relative path from /EasyCandyBar/
 	 */
 	GET(path: string | undefined | null, callback: Functions["GETResponse"]): void;
 }
