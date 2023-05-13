@@ -15,22 +15,29 @@
 		"name": "Contributors dialog",
 		"type": "checkbox"
 	},
-	"default_theme": {
-		"name": "Theme",
-		"type": "radio",
-		"options": {
-			"auto": { "name": "Automatic" },
-			"light": { "name": "Light" },
-			"dark": { "name": "Dark" }
-		}
-	},
 	"description": {
 		"name": "Description",
 		"type": "text"
 	},
-	"base_color": {
-		"name": "Base Color",
-		"type": "color"
+	"theme": {
+		"name": "Theme",
+		"type": "fieldset",
+		"auto": {
+			"type": "radio",
+			"name": "Automatic"
+		},
+		"light": {
+			"type": "radio",
+			"name": "Light"
+		},
+		"dark": {
+			"type": "radio",
+			"name": "Dark"
+		},
+		"base_color": {
+			"name": "Base Color",
+			"type": "color"
+		}
 	},
 	"home_image_style": {
 		"name": "Home Image Style",

@@ -70,6 +70,10 @@ const RendererAPI = {
 		ipcRenderer.on("savedIcon", callback);
 		ipcRenderer.send("setIcon", id, imagechanged, icon, type);
 	},
+	setConfig: (config: Configuration, callback: Functions["void"]): void => {
+		ipcRenderer.on("savedConfig", callback);
+		ipcRenderer.send("setConfig", config);
+	},
 	/**
 	 * Lets user choose an image that then gets copied to the cache
 	 * @param id Icon's id

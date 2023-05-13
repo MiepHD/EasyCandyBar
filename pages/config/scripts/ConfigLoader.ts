@@ -1,10 +1,13 @@
 class ConfigLoader {
 	public constructor() {
 		RendererAPI.GET("./pages/config/res/structure.json", (file: string) => {
-			this.load(JSON.parse(file), $(`body`));
+			$(`<form action="saving.html"></form>`).appendTo("body");
+			const root = $("form");
+			this.load(JSON.parse(file), root);
+			$(`<input type="submit" value="Submit" />"`).appendTo(root);
 		});
 	}
-	private load(structure: any, element: JQuery<HTMLElement>) {
+	private load(structure: any, element: JQuery<HTMLElement>): void {
 		const root = element[0];
 		for (const [k, v] of Object.entries(structure)) {
 			switch (k) {
@@ -13,19 +16,6 @@ class ConfigLoader {
 					if (value.type) {
 						switch (value.type) {
 							case "radio":
-								$(`
-									<fieldset id="${k}">
-										<legend>${value.name}</legend>
-									</fieldset>
-								`).appendTo(root);
-								for (const [option, description] of Object.entries(value.options)) {
-									const desc = description as any;
-									$(`
-										<input type="radio" name="${k}" id="${k}_${option}" />
-										<label for="${k}_${option}">${desc["name"]}</label>
-									`).appendTo($(`fieldset#${k}`));
-								}
-								break;
 							case "text":
 							case "color":
 							case "checkbox":
@@ -56,5 +46,6 @@ class ConfigLoader {
 		}
 	}
 }
-
-new ConfigLoader();
+document.addEventListener("DOMContentLoaded", () => {
+	new ConfigLoader();
+});

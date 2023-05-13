@@ -40,6 +40,7 @@ interface RendererAPIStructure {
 		type: string | undefined | null,
 		callback: Functions["void"]
 	): void;
+	setConfig(config: Configuration, callback: Functions["void"]): void;
 	/**
 	 * Lets user choose an image that then gets copied to the cache
 	 * @param id Icon's id
