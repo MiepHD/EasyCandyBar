@@ -1,4 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { Configuration } from "./Configuration";
+
 const RendererAPI = {
 	addImagesListener: (callback: Functions["void"]): void => {
 		ipcRenderer.on("ImagesLoaded", callback);
@@ -70,8 +72,13 @@ const RendererAPI = {
 		ipcRenderer.on("savedIcon", callback);
 		ipcRenderer.send("setIcon", id, imagechanged, icon, type);
 	},
-	setConfig: (config: Configuration, callback: Functions["void"]): void => {
-		ipcRenderer.on("savedConfig", callback);
+	getConfig: (callback: Function): void => {
+		ipcRenderer.on("Config", (e: any, config: Configuration) => {
+			callback(config);
+		});
+		ipcRenderer.send("getConfig");
+	},
+	setConfig: (config: Configuration): void => {
 		ipcRenderer.send("setConfig", config);
 	},
 	/**

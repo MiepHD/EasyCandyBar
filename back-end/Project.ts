@@ -1,4 +1,5 @@
 import { ProjectFileHandler } from "./ProjectFileHandler";
+import { Configuration } from "./Configuration";
 
 /**
  * Create an object of this class to open a project
@@ -65,7 +66,11 @@ export class Project {
 	 * @returns Configuration for project
 	 */
 	public getConfig(): Configuration {
-		return JSON.parse(this.fs.read(`projects/${this.id}/config.json`));
+		try {
+			return JSON.parse(this.fs.read(`projects/${this.id}/config.json`));
+		} catch {
+			return new Configuration();
+		}
 	}
 	public setConfig(data: Configuration): void {
 		this.fs.write(`projects/${this.id}/config.json`, data);

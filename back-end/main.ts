@@ -4,6 +4,7 @@ import { FileHandler } from "./FileHandler";
 import { DataConverter } from "./DataConverter";
 
 import { app, BrowserWindow, ipcMain } from "electron";
+import { Configuration } from "./Configuration";
 const fs: FileHandler = new FileHandler(),
 	convert: DataConverter = new DataConverter();
 let win: any;
@@ -114,9 +115,17 @@ ipcMain.on("setIcon", (e: any, id: string, imagechanged: boolean, icon: any, typ
 	e.reply("savedIcon");
 });
 
-ipcMain.on("getConfig", (e: any) => {});
+ipcMain.on("getConfig", (e: any) => {
+	ensureProject(e, () => {
+		e.reply("Config", currentProject.getConfig());
+	});
+});
 
-ipcMain.on("setConfig", (e: any, data: any) => {});
+ipcMain.on("setConfig", (e: any, data: Configuration) => {
+	ensureProject(e, () => {
+		currentProject.setConfig(data);
+	});
+});
 
 ipcMain.on("getChangelog", (e: any) => {});
 
@@ -148,7 +157,7 @@ ipcMain.on("GET", (e: any, path: string) => {
 	e.reply("GETResponse", fs.read(path));
 });
 
-function ensureProject(e: any, callback: Function): void {
+function ensureProject(e: any, callback: Functions["void"]): void {
 	if (!currentProject) {
 		new PathChooser().dir().then((path: string) => {
 			if (path.includes("canceled")) {

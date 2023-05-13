@@ -40,7 +40,8 @@ interface RendererAPIStructure {
 		type: string | undefined | null,
 		callback: Functions["void"]
 	): void;
-	setConfig(config: Configuration, callback: Functions["void"]): void;
+	getConfig(callback: Functions["config"]): void;
+	setConfig(config: Configuration): void;
 	/**
 	 * Lets user choose an image that then gets copied to the cache
 	 * @param id Icon's id
@@ -62,3 +63,12 @@ interface RendererAPIStructure {
 	GET(path: string | undefined | null, callback: Functions["GETResponse"]): void;
 }
 declare const RendererAPI: RendererAPIStructure;
+
+interface Functions {
+	void(): void;
+	icons(icons: Array<string>): void;
+	icon(icon: Icon): void;
+	projectInfo(project: ProjectStructure): void;
+	GETResponse(file: string): void;
+	project(project: Project): void;
+}
